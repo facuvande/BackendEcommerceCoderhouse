@@ -1,0 +1,8 @@
+{"level":"error","message":"Esto es un error","timestamp":"2023-06-06T15:51:20.806Z"}
+{"level":"error","message":"Error - PUT - TypeError: newProducts.map is not a function","timestamp":"2023-06-29T15:53:10.342Z"}
+{"level":"error","message":"Error - POST - TypeError: Cannot read properties of null (reading 'email')","timestamp":"2023-07-04T14:07:51.012Z"}
+{"level":"error","message":"Error - POST - TypeError: Cannot read properties of null (reading 'email')","timestamp":"2023-07-04T14:11:13.554Z"}
+{"level":"error","message":"Error - POST - TypeError: Cannot read properties of null (reading 'email')","timestamp":"2023-07-04T14:22:01.139Z"}
+{"level":"error","message":"Error - POST - TypeError: Cannot read properties of null (reading 'email')","timestamp":"2023-07-04T14:29:31.581Z"}
+{"level":"error","message":"Error - POST - TypeError: Cannot read properties of null (reading 'email')","timestamp":"2023-07-04T14:32:00.649Z"}
+{"level":"error","message":"Error - POST - TypeError: Cannot read properties of null (reading 'email')","timestamp":"2023-07-04T14:35:27.002Z"}

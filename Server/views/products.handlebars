@@ -1,0 +1,87 @@
+<div>
+    {{> header}}
+    <div class="infoUser">
+        <p><span>Bienvenido</span> {{firstName}}</p>
+        <p><span>Rol:</span> {{role}}</p>
+        <button onclick="logout()">Cerrar Sesion</button>
+    </div>
+    <div class="header">
+        {{> title titulo="Listado De Productos"}}
+        <div class="container-icon">
+            <i class="fa-solid fa-cart-shopping"></i>
+        </div>
+    </div>
+        <div class="filters">
+            <div class="category">
+                <p>Filtrar Categorias</p>
+                <button onclick="setCategory()">Quitar Filtro</button>
+                <button onclick="setCategory('iphone')">Iphone</button>
+                <button onclick="setCategory('samsung')" >Samsung</button>
+                <button onclick="setCategory('motorola')" >Motorola</button>
+            </div>
+            <div class="category priceButtons">
+                <p>Ordenar por precio</p>
+                <button onclick="setPrice()">Quitar Filtro</button>
+                <button onclick="setPrice('asc')">Ascendente</button>
+                <button onclick="setPrice('desc')">Descendente</button>
+                
+            </div>
+            <div class="enStock">
+                <div class="category status filter">
+                    <p>Tipo:</p>
+                        <button onclick="setStatus()">Todos</button>
+                        <button onclick="setStatus('inStock')">En stock</button>
+                    </div>
+                </div>
+            </div>
+            <nav aria-label='Page navigation example'>
+            <ul class='pagination justify-content-center'>
+                {{#if hasPrevPage}}
+                    <li class='page-item'>
+                        <a class='page-link' href='#' tabindex='-1' aria-disabled='true' onclick="setPrev()">Anterior</a>
+                    </li>
+                {{/if}}
+                {{#each paginas}}
+                    <li class='page-item number' aria-current='page' id="page-{{this}}">
+                        <a class='page-link' data-page='{{this}}' onclick="setPage({{this}})">{{this}}</a>
+                    </li>
+                {{/each}}
+                {{#if hasNextPage}}
+                    <li class='page-item'>
+                        <a class='page-link' href='#' onclick="setNext()">Siguiente</a>
+                    </li>
+                {{/if}}
+            </ul>
+            </nav>
+        </div>
+    <div class="container-items">
+        {{#each data}}
+        <div class="item" data-id='{{this._id}}'>
+                <figure>
+                    <img src='./img/{{this.thumbnail}}' alt='{{this.title}}' class="productsImg">
+                </figure>
+                <div class="info-product">
+                    <div class="product-text">
+                        <h2>{{this.title}}</h2>
+                        <p class="description">{{this.description}}</p>
+                        <p class="price">${{this.price}}</p>
+                    </div>
+                    <div class="productsButtons">
+                        <button class="verDetalles" id="verDetalles">Ver Detalles</button>
+                        <button class="addToCart" id="addToCart">Agregar al Carrito</button>
+                    </div>
+                </div>
+            </div>
+        {{/each}}
+    </div>
+        <section class="section products_container">
+            <div class="products" id="productsContainer">
+                
+            </div>
+        </section>
+    </div>
+</div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="https://kit.fontawesome.com/3756f86c62.js" crossorigin="anonymous"></script>
+<script src="js/products.js"></script>

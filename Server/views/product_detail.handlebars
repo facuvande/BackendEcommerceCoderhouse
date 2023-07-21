@@ -1,0 +1,12 @@
+<div>
+    {{> header}}
+    {{> title titulo="Producto"}}
+    <div class="productIndividualContainer">
+        <h1>{{data.title}}</h1>
+        <h1>{{data.description}}</h1>
+        <h1>${{data.price}}</h1>
+        <h1>{{data.stock}}</h1>
+    </div>
+</div>
+
+<script src="/socket.io/socket.io.js"></script>

@@ -1,0 +1,50 @@
+<div class='registerContainer'>
+    {{> title titulo="Registrar Usuario"}}
+    <img src="img/fondregister.svg" alt="Fondo Nubes" class="clouds">
+    <div class="signup">
+      <h2>Registrarte</h2>
+      {{!-- <h3>Volver al </h3> --}}
+      <form onsubmit='send(event)' class="form">
+        <div class="textbox">
+          <input id='form-firstName' type='text' name='form-firstName' placeholder='Nombre'  required/>
+          <label>Nombre</label>
+          <span class="material-symbols-outlined">
+            account_circle
+          </span>
+        </div>
+        <div class="textbox">
+          <input id='form-lastName' type='text' name='form-lastName' placeholder='Apellido' required/>
+          <label>Apellido</label>
+          <span class="material-symbols-outlined">
+            account_circle
+          </span>
+        </div>
+        <div class="textbox">
+          <input id='form-email' type='text' name='form-email' placeholder='email'  required/>
+          <label>Email</label>
+          <span class="material-symbols-outlined">
+          mail
+          </span>
+        </div>
+        <div class="textbox">
+          <input id='form-age' type='number' name='form-age' placeholder='edad' required/>
+          <label>Edad</label>
+          <span class="material-symbols-outlined">
+            account_circle
+          </span>
+        </div>
+        <div class="textbox">
+          <input id='form-password' type='password' name='form-password' placeholder='password' required/>
+          <label>Contrasenia</label>
+          <span class="material-symbols-outlined">
+          key
+          </span>
+        </div>
+          <div class="errorRegister"></div>
+          <p>Cuentas con un usuario? <a href="/login">Logeate aqui</a></p>
+          <input type='submit' value='Guardar Usuario' class="buttonRegister"/>
+      </form>
+    </div>
+  </div>
+</div>
+<script src='js/register.js'></script>

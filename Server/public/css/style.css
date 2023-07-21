@@ -1,0 +1,591 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700;800&display=swap');
+
+/* **********     Reset CSS     ********** */
+:root {
+    --main-font: sans-serif;
+    --font-size: 16px;
+    --container-width: 1200px;
+}
+
+html {
+    box-sizing: border-box;
+    scroll-behavior: smooth;
+}
+
+*,
+*:before,
+*:after {
+    box-sizing: inherit;
+}
+
+body {
+    background-color: #F5F5F5;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+    font-family: 'Open Sans', sans-serif;
+}
+
+img,
+video {
+    max-width: 100%;
+    height: auto;
+}
+
+/* Header */
+
+header{
+    background-color: #11a3cf;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-content: center;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+.imgContainer img{
+    width: 80px;
+}
+
+header ul{
+    display: flex;
+    list-style: none;
+}
+
+header ul li a{
+    color: white;
+    font-size: 20px;
+    margin-right: 15px;
+    text-decoration: none;
+    background-color: #1111112f;
+    padding: 5px;
+    border-radius: 5px;
+    transition: .5s;
+}
+header ul li a:hover{
+    transition: .5s;
+    background-color: #1111115b
+}
+
+/* Home Handlebars */
+
+.header{
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 30px 0 40px 0;
+}
+
+.fa-cart-shopping{
+    font-size: 30px;
+}
+
+.productsImg{
+    max-width: 100%;
+}
+
+.container-items{
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+.item{
+    border-radius: 10px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.20);
+    height: 100%;
+}
+
+.item img{
+    object-fit: cover;
+    border-radius: 10px 10px 0 0;
+    transition: .4s;
+}
+
+.item:hover img{
+    transition: .4s;
+    transform: scale(1.1);
+}
+
+.info-product{
+    padding: 15px 30px;
+    display: flex;
+    flex-direction: column;
+    line-height: 1.5;
+}
+
+.product-text {
+    height: 250px; /* ajustar según la altura deseada */
+    overflow: hidden;
+}
+
+.productsButtons button{
+    border: none;
+    background: none;
+    background-color: #000;
+    color: #fff;
+    width: 100%;
+    margin-right: 5px;
+    padding: 15px 10px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.price{
+    font-size: 25px;
+    font-weight: 900;
+}
+
+.productsButtons{
+    display: flex;
+    width: 100%;
+}
+
+.infoUser{
+    text-align: center;
+    font-size: 20px;
+}
+.infoUser span {
+    font-weight: 600;
+}
+
+.filters{
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Estilos generales para los botones */
+.category button {
+    background-color: white;
+    border: 1px solid black;
+    color: black;
+    font-size: 16px;
+    padding: 8px 16px;
+    margin-right: 16px;
+    transition: all 0.3s ease;
+}
+
+.category button:hover {
+    background-color: black;
+    color: white;
+    cursor: pointer;
+}
+
+.category button.active {
+    background-color: black;
+    color: white;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+    list-style: none;
+}
+
+.page-item {
+    margin-right: 5px;
+}
+
+.page-link {
+    display: block;
+    padding: 5px 10px;
+    background-color: #f5f5f5;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    color: #555;
+    text-decoration: none;
+}
+
+.page-link:hover {
+    background-color: #eee;
+}
+
+.page-link:focus {
+    box-shadow: none;
+}
+
+.page-item.active .page-link {
+    background-color: #007bff;
+    border-color: #007bff;
+    color: #fff;
+}
+
+.page-item.disabled .page-link {
+    background-color: #f5f5f5;
+    border-color: #ddd;
+    color: #555;
+    pointer-events: none;
+}
+/* RealTimeProducts */
+
+.container{
+    width: 100%;
+    max-width: 1000px;
+    margin: auto;
+}
+
+.table{
+    width: 100%;
+    border: 1px solid #ccc;
+    border-collapse: collapse;
+    margin: 0;
+    padding: 0;
+    table-layout: fixed;
+}
+.table caption{
+    font-size: 28px;
+    text-transform: uppercase;
+    font-weight: bold;
+    margin: 8px 0;
+}
+.table tr{
+    background-color: #f8f8f8;
+    border: 1px solid #ddd;
+}
+
+.table th, .table td{
+    font-size: 16px;
+    padding: 8px;
+    text-align: center;
+}
+
+.table thead th{
+    text-transform: uppercase;
+    background-color: #ddd;
+}
+
+.table tbody tr:hover{
+    background-color: rgba(0, 0, 0, 0.2);
+}
+
+.table tbody td:hover{
+    background-color: rgba(0, 0, 0, 0.2);
+}
+
+/* Reset-password */
+.reset-password-container{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    height: 100vh;
+}
+
+.reset-password-container form{
+    width: 400px;
+    padding: 20px;
+    background-color: #f2f2f2;
+    border: 1px solid #ccc;
+}
+
+.reset-password-container  h1 {
+    text-align: center;
+}
+
+.reset-password-container form {
+    display: flex;
+    flex-direction: column;
+}
+
+.reset-password-container label {
+    margin-bottom: 10px;
+}
+
+.reset-password-container input[type="email"] {
+    padding: 10px;
+    margin-bottom: 20px;
+}
+
+.reset-password-container button {
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}
+
+.reset-password-container button:hover {
+    background-color: #45a049;
+}
+
+@media screen and (max-width: 600px){
+    .table{
+        border: 0px;
+    }
+    .table caption{
+        font-size: 22px;
+    }
+    .table thead{
+        display: none;
+    }
+    .table tr{
+        margin-bottom: 8px;
+        border-bottom: 4px solid #ddd;
+        display: block;
+    }
+    .table th, .table td{
+        font-size: 12px;
+    }
+    .table td{
+        display: block;
+        border-bottom: 1px solid #ddd;
+        text-align: right;
+    }
+    .table td:last-child{
+        border-bottom: 0px;
+    }
+    .table td::before{
+        content: attr(data-label);
+        font-weight: bold;
+        text-transform: uppercase;
+        float: left;
+    }
+}
+
+.dnone{
+    display: none;
+}
+
+/* Register */
+
+.clouds{
+    position: absolute;
+    top: 0
+}
+
+.textbox input{
+    border: 0;
+    width: 100%;
+    height: 100px;
+    background: transparent;
+    font-family: inherit;
+    font-size: 16px;
+    outline: none;
+    color: white;
+}
+
+.signup{
+    color: white;
+    position: fixed;
+    z-index: 2;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 70%;
+    padding: 100px 90px;
+    background-color: #111820; 
+}
+
+.signup > h2{
+    font-size: 40px;
+    margin: 0 0 26px;
+    color: rgb(255, 255, 255 / 96%);
+}
+.signup > h3{
+    margin: 0 0 30px;
+    color: rgb(255, 255, 255 / 40%);
+}
+
+.form{
+    margin: 0;
+    display: grid;
+    gap: 16px;
+}
+
+.textbox{
+    position: relative;
+    margin-bottom: 16px;
+}
+
+.textbox span{
+    position: absolute;
+    top: 50%;
+    translate: 0 -50%;
+    left: 0;
+    font-size: 22px;
+    pointer-events: none;
+    color: rgb(255, 255, 255 / 40%);
+}
+
+.textbox input{
+    padding: 0 24px 0 36px;
+    border-bottom: 2px solid #2b3442;
+    color: rgb(255, 255, 255 /96%);
+    height: 72px;
+}
+
+.textbox input:focus{ border-color: #216ce7;}
+
+:is(.textbox input:focus, .textbox input:valid) ~ span {
+    color: rgb(255, 255, 255 / 96%);
+}
+
+.textbox label {
+    position: absolute;
+    top: 50%;
+    left: 36px;
+    translate: 0 -50px;
+    color: rgb(255, 255, 255 / 40%);
+    pointer-events: none;
+    transition: .5s;
+}
+
+:is(.textbox input:focus, .textbox input:valid) ~ .textbox label{
+    translate: -40px -40px;
+    scale: 0.875;
+    transition: .5s;
+
+}
+
+.textbox input:focus ~ .textbox label { color: #216ce7 }
+
+.signup p { color: #778395 }
+.signup p > a {color: #216ce7}
+
+.buttonRegister{
+    background-color: #216ce7;
+    height: auto;
+    padding: 12px;
+    border-radius: 4px;
+    color: white;
+}
+.buttonRegister:hover{
+    cursor: pointer;
+    opacity: .7;
+}
+
+/* Login */
+.form-container{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    height: 100vh;
+    font-family: Arial, Helvetica, sans-serif;
+    background: linear-gradient(27deg, #34495e 50%, #2c3e50 50%);
+}
+
+.form-body{
+    width: 400px;
+    min-width: 300px;
+    border-radius: 10px;
+    border-top-left-radius: 50px;
+    border-bottom-right-radius: 50px;
+    border: solid 1px #2980b9;
+    margin: 10px;
+}
+
+.form-body span{
+    font-size: 120px;
+    display: block;
+    margin: 20px auto;
+    text-align: center;
+    color: #fff;
+}
+
+.login-text{
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #fff;
+    margin-bottom: 25px;
+}
+
+.form-body input{
+    display: block;
+    margin: auto;
+    height: 40px;
+    width: 75%;
+    padding-left: 10px;
+    color: #fff;
+    border: 1px solid #fff;
+    border-radius: 2px;
+    background-color: transparent;
+    border-top-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    font-size: 1rem;
+    outline: none;
+}
+
+.form-body input[type="password"]{
+    margin-top: 20px;
+}
+
+::placeholder{
+    font-size: 1rem;
+    color: rgba(255, 255, 255, .596);
+}
+
+.form-body input:hover{
+    transition: .5s;
+    border: 1px solid #2980b9;
+    color: #2498db;
+}
+
+.form-body input[type='submit']{
+    display: block;
+    margin: auto;
+    margin-top: 25px;
+    margin-bottom: 30px;
+    height: 40px;
+    width: 78%;
+    background: transparent;
+    color: #b9c4c6;
+    border-radius: 2px;
+    cursor: pointer;
+    outline: none;
+    transition: all .5s ease;
+}
+
+.noCuenta{
+    text-align: center;
+    color: white;
+    font-size: 15px;
+}
+.noCuenta a{
+    color: #11a3cf;
+}
+
+.errorLogin{
+    text-align: center;
+}
+.errorLogin p{
+    text-align: center;
+    color: rgb(175, 5, 5);
+}
+
+.login-github{
+    text-decoration: none;
+}
+.login-github button{
+    display: block;
+    margin: auto;
+    margin-top: 25px;
+    margin-bottom: 30px;
+    height: 40px;
+    width: 78%;
+    background: transparent;
+    color: #b9c4c6;
+    border-radius: 2px;
+    cursor: pointer;
+    outline: none;
+    transition: all .5s ease;
+    border: 1px solid #fff;
+    font-size: 16px;
+}
+.fa-github{
+    font-size: 18px;
+    margin-right: 5px;
+}

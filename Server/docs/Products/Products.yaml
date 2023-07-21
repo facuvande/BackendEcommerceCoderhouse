@@ -1,0 +1,199 @@
+paths:
+  /api/products/:
+    get: 
+      summary: Obtiene todos los productos
+      tags:
+        - Products
+      responses:
+        200:
+          description: Los productos fueron obtenidos satisfactoriamente de la base de datos
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    description: El estado de la respuesta
+                    value: true
+                    example: true
+                  payload:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Products'
+        500:
+          description: Error interno del servidor. Usualmente generado por una query defectuosa o un fallo de conexion con la base de datos
+    post:
+      summary: Guarda un producto
+      tags:
+        - Products
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#components/requestBodies/updateProduct'
+      responses:
+        200:
+          description: El producto fue guardado con exito
+  /api/products/{pid}:
+    get:
+      summary: Obtiene un producto por su id
+      tags:
+        - Products
+      parameters:
+        - name: pid
+          in: path
+          description: El id del producto
+          required: true
+          schema:
+            type: string
+      responses:
+        202:
+          description: El usuario fue obtenido satisfactoriamente de la base de datos
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  $ref: '#components/schemas/Products'
+        400:
+          description: La base de datos recibio un parametro invalido, verifica el PID
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: El estado de la consulta
+                    value: error
+                    example: error
+                  error:
+                    type: array
+                    description: Detalle de los datos invalidos
+        500:
+          description: Error interno del servidor. Usualmente generado por una query defectuosa o un fallo de conexion con la base de datos
+    put:
+      summary: Actualiza un producto a partir de su id
+      tags:
+        - Products
+      parameters:
+          - name: pid
+            in: path
+            description: El id del producto
+            required: true
+            schema:
+              type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#components/requestBodies/updateProduct'
+    delete:
+      summary: Elimina un producto a partir de su id
+      tags:
+        - Products
+      parameters:
+        - name: pid
+          in: path
+          description: El id del producto
+          required: true
+          schema:
+            type: string
+components:
+  schemas:
+    Products:
+      type: object
+      properties:
+        _id:
+          type: ObjectId
+          description: El Id del producto
+          example: 5f9d7a9b96c6b4a1b73c9b4a1b
+        title:
+          type: string
+          description: El titulo del producto
+          example: Samsung Galaxy A54 256GB
+        description:
+          type: string
+          description: La descripcion del producto
+          example: Telefono Samsung Galaxy a54 de 256GB de color rojo
+        category:
+          type: string
+          description: La categoria del producto
+          example: samsung
+        price:
+          type: number
+          description: El precio del producto
+          example: 1234
+        thumbnail:
+          type: array
+          description: Las imagenes asociadas al producto
+          example: ["16811505040-Samsung_A54.png"]
+        code:
+          type: string
+          description: El codigo unico del producto
+          example: "samsunga54256"
+        stock:
+          type: number
+          description: La cantidad del producto en stock
+          example: 20
+        status:
+          type: boolean
+          description: El estado actual del producto
+          example: true
+        owner:
+          type: string
+          description: El email del creador del producto
+          example: jorge@hotmail.com
+  requestBodies:
+    updateProduct:
+      type: object
+      required:
+        - title
+        - description
+        - category
+        - price
+        - thumbnail
+        - code
+        - stock
+        - status
+        - owner
+      properties:
+        title:
+          type: string
+          description: El nombre del producto
+          example: Iphone 12 Pro Max
+        description:
+          type: string
+          description: La descripcion del producto
+          example: Iphone 12 Pro Max de color rojo 265GB
+        category:
+          type: string
+          description: La categoria del producto
+          example: Iphone
+        price:
+          type: number
+          description: El precio del producto
+          example: 23000
+        thumbnail:
+          type: array
+          description: Las imagenes del producto
+          example: ['as3344343-iphone.jpg', '3nanfni54-iphone.jpg']
+        code:
+          type: string
+          description: El codigo unico del producto
+          example: iphone23435
+        stock:
+          type: number
+          description: La cantidad de stock del producto
+          example: 24
+        status:
+          type: boolean
+          description: El estado del producto
+          example: true
+        owner:
+          type: string
+          description: El email del creador del producto
+          example: facundovs84@hotmail.com.ar

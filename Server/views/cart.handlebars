@@ -1,0 +1,13 @@
+<div>
+    {{> header}}
+    {{> title titulo="Cart"}}
+    <div class="section products_container">
+        {{#each data}}
+            <div class="product">
+                <h2>{{this.product.title}}</h2>
+                <p class="price">${{this.product.price}}</h2>
+                <p class="price">cantidad: {{this.quantity}}</p>
+            </div>
+        {{/each}}
+    </div>
+</div>

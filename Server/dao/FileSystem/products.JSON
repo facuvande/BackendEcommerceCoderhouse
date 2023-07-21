@@ -1,0 +1,74 @@
+[
+  {
+    "id": 1,
+    "title": "Lámpara Tokio",
+    "description": "Lámpara escritorio aluminio negro led",
+    "price": 2200,
+    "thumbnail": "ruta de imagen",
+    "code": 101,
+    "stock": 3
+  },
+  {
+    "id": 2,
+    "title": "Double SH",
+    "description": "Embutido retraible doble cabezal móvil aluminio blanco led",
+    "price": 2200,
+    "thumbnail": "ruta de imagen",
+    "code": 101,
+    "stock": 3
+  },
+  {
+    "id": 3,
+    "title": "Berilo",
+    "description": "Plafon circular aluminio negro  led",
+    "price": 2200,
+    "thumbnail": "ruta de imagen",
+    "code": 101,
+    "stock": 3
+  },
+  {
+    "id": 4,
+    "title": "Hat",
+    "description": "Lámpara de píe difusora aluminio negra led",
+    "price": 2200,
+    "thumbnail": "ruta de imagen",
+    "code": 101,
+    "stock": 3
+  },
+  {
+    "id": 5,
+    "title": "Adel",
+    "description": "Aplique circular estanco aluminio negro led",
+    "price": 2200,
+    "thumbnail": "ruta de imagen",
+    "code": 101,
+    "stock": 3
+  },
+  {
+    "id": 6,
+    "title": "Tuel",
+    "description": "Embutido antideslumbrante aluminio blanco GU10 led",
+    "price": 2200,
+    "thumbnail": "ruta de imagen",
+    "code": 101,
+    "stock": 3
+  },
+  {
+    "id": 7,
+    "title": "Lámpara Tokio",
+    "description": "Lámpara escritorio aluminio negro led",
+    "price": 2200,
+    "thumbnail": "ruta de imagen",
+    "code": 101,
+    "stock": 3
+  },
+  {
+    "id": 9,
+    "title": "Lámpara Tokio",
+    "description": "Lámpara escritorio aluminio negro led",
+    "price": 2200,
+    "thumbnail": "ruta de imagen",
+    "code": 101,
+    "stock": 3
+  }
+]
