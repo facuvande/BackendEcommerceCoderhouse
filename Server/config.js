@@ -32,6 +32,7 @@ const config = {
     mail: {
         host: process.env.MAIL_HOST ?? 'smtp.ethereal.email',
         port: process.env.MAIL_PORT ?? 587,
+        secure: true,
         auth: {
             user: process.env.MAIL_USER ?? 'madisen26@ethereal.email',
             pass: process.env.MAIL_PASS ?? 'wXJurRPReuJ5x5eCNf'

@@ -77,17 +77,19 @@ class AuthController{
             const token = generateToken({
                 email: req.body.email
             })
-        
+            console.log(token)
             const resetPasswordUrl = `http://localhost:8080/reset-password-ok/${token}`
         
             await this.#emailService.sendEmail(
-                { 
+                {
+                    from: '"Recuperacion de contrasena" <facundovs84@hotmail.com.ar>', 
                     to: req.body.email, 
                     subject: 'Has solicitado un Restablecimiento de contrasena', 
                     html: `Para restablecer tu constrasena , haz click en el siguiente enlace <a href="${resetPasswordUrl}">enlace</a>`
             })
             res.status(202).send({token: isValidEmail})
         } catch (error) {
+            console.log(error)
             res.status(404).send({error: error})
         }
     }
