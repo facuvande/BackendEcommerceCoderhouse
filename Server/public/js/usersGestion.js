@@ -1,40 +1,7 @@
-const socket = io()
 const $tbody = document.getElementById('tbody');
 const $fragment = document.createDocumentFragment()
 const $article = document.getElementById('article')
 const $form = document.getElementById('crud-form')
-
-let products;
-
-socket.on('products_actuales', data => {
-    console.log('socket conectado desde el front')
-    products = data;
-    limpiarHtml()
-    mostrarHtml()
-})
-
-function mostrarHtml(){
-    products.forEach(el =>{
-        const tr = document.createElement('tr')
-        tr.setAttribute('data-id', el._id)
-        tr.innerHTML = `
-            <td data-label="Imagen"><img src="/img/products/${el.thumbnail[0]}" alt="${el.title}" width="50"></td>
-            <td data-label="Producto">${el.title}</td>
-            <td data-label="Descripcion">${el.description}</td>
-            <td data-label="Precio">${el.price}</td>
-            <td data-label="Stock">${el.stock}</td>
-            <td data-label="Categoria">${el.category}</td>
-            <td data-label="Code">${el.code}</td>
-            <td data-label="Opciones">
-                <button class="delete">Eliminar</button>
-                <button>Editar</button>
-            </td>
-        `
-        $fragment.appendChild(tr)
-    })
-    
-    $tbody.appendChild($fragment)
-}
 
 document.addEventListener('submit', async e=>{
     if(e.target === $form){
@@ -74,11 +41,11 @@ document.addEventListener('submit', async e=>{
 document.addEventListener('click', async e =>{
     if(e.target.matches('.delete')){
         const id = e.target.parentElement.parentElement.dataset.id
-        let isDelete = confirm(`Estas seguro de eliminar el id ${id}?`)
+        let isDelete = confirm(`Estas seguro de eliminar el usuario con id ${id}?`)
 
         if(isDelete){
             try {
-                const response = await fetch(`/api/products/${id}`, {
+                const response = await fetch(`/api/users/${id}`, {
                     method: 'DELETE',
                     headers: {},
                 })
@@ -88,15 +55,52 @@ document.addEventListener('click', async e =>{
                     p.innerText = `Ocurrio un error al eliminar el producto`
                 }
                 location.reload()
-
             } catch (error) {
-                console.log(error)
+                Toastify({
+                    text: 'Ocurrio un error, vuelva a intentarlo mas tarde.',
+                    duration: 3000,
+                    close: true,
+                    gravity: "bottom", // `top` or `bottom`
+                    position: "right", // `left`, `center` or `right`
+                    stopOnFocus: true, // Prevents dismissing of toast on hover
+                    style: {
+                        background: "linear-gradient(to right, #D71313, #B31312)",
+                    },
+                }).showToast();
             }
         }
     }
 
-    if(e.target.matches('.add-btn')){
-        $article.classList.toggle('dnone')
+    if(e.target.matches('.change-role')){
+        const id = e.target.parentElement.parentElement.dataset.id
+        let isDelete = confirm(`Estas seguro que desea cambiar el rol al usuario con id ${id}?`)
+
+        if(isDelete){
+            try {
+                const response = await fetch(`/api/users/premium/${id}`, {
+                    method: 'POST',
+                    headers: {},
+                })
+
+                if(!response.ok){
+                    const p = document.getElementById('producto-id')
+                    p.innerText = `Ocurrio un error al modificar el rol del usuario`
+                }
+                location.reload()
+            } catch (error) {
+                Toastify({
+                    text: 'Ocurrio un error, vuelva a intentarlo mas tarde.',
+                    duration: 3000,
+                    close: true,
+                    gravity: "bottom", // `top` or `bottom`
+                    position: "right", // `left`, `center` or `right`
+                    stopOnFocus: true, // Prevents dismissing of toast on hover
+                    style: {
+                        background: "linear-gradient(to right, #D71313, #B31312)",
+                    },
+                }).showToast();
+            }
+        }
     }
 })
 

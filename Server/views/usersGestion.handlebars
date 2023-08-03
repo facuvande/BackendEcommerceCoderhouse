@@ -1,0 +1,38 @@
+<div>
+    {{> header firstName=firstName isAdmin=isAdmin lastName=lastName profileImg=profileImg}}
+    {{> title}}
+    <div class="container">
+        <table class="table">
+            <caption>Listado de usuarios</caption>
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Apellido</th>
+                    <th>Email</th>
+                    <th>Edad</th>
+                    <th>Rol</th>
+                    <th>Ult. conexion</th>
+                    <th>Opciones</th>
+                </tr>
+            </thead>
+            <tbody id="tbody">
+                {{#each data}}
+                    <tr data-id={{this._id}}>
+                        <td data-label="Producto">{{this.firstName}}</td>
+                        <td data-label="Descripcion">{{this.lastName}}</td>
+                        <td data-label="Precio">{{this.email}}</td>
+                        <td data-label="Stock">{{this.age}}</td>
+                        <td data-label="Categoria">{{this.role}}</td>
+                        <td data-label="Code">{{this.last_connection}}</td>
+                        <td data-label="Opciones">
+                            <button class="change-role">Editar Rol</button>
+                            <button class="delete">Eliminar</button>
+                        </td>
+                    </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script src="js/usersGestion.js"></script>

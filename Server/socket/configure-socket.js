@@ -1,7 +1,6 @@
 import { Server } from 'socket.io'
 import ChatService from '../dao/Services/chat.service.js'
 import productsModel from '../dao/models/products.model.js'
-import axios from 'axios'
 const chat = new ChatService()
 const messages = [];
 

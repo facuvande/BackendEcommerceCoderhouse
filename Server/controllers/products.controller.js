@@ -16,7 +16,11 @@ class ProductsController{
         try {
             // console.log({usuario: req.user})
             const producto = req.body;
+            console.log('Body del producto')
+            console.log(req.body)
             const img = req.files
+            console.log('Img del producto')
+            console.log(req.files)
             
             // Debido a que si ponemos mas de una imagen req.files me otorga 2 objetos 1 por imagen, no puedo acceder con req.files.filename por lo tanto uso este metodo para extraer sus respectivos filename y guardarlo en la constante filenames
             const filenames = []

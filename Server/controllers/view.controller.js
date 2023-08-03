@@ -2,10 +2,7 @@ import UsersService from "../dao/Services/users.service.js";
 import ProductService from "../dao/Services/products.service.js";
 import CartService from '../dao/Services/carts.service.js'
 import config from "../config.js";
-
-import axios from "axios";
-
-
+import { verifyToken } from "../utils/tokenGenerate.js";
 class ViewController{
     #CartService
     #ProductService
@@ -14,6 +11,43 @@ class ViewController{
         this.#CartService = CartService;
         this.#ProductService = ProductService;
         this.#UserService = UserService;
+    }
+
+    async init(req, res){
+        res.redirect('/login')
+    }
+
+    async registerPage(req, res){
+        const email = req.user?.email ?? null;
+        if(email){
+            // Si ya existe el dato del email en la session lo redireccionamos al perfil
+            return res.redirect('/products');
+        }
+        res.render('register')
+    }
+
+    async loginPage(req, res){
+        const errorMessage = req.query.error ? 'Email o contrasena incorrectos' : '';
+        const email = req.cookies.current
+    
+        if(email){
+            return res.redirect('/products');
+        }
+        res.render('login', { errorMessage })
+    }
+
+    async passwordResetOk(req, res){
+        try {
+            console.log(req.params.data)
+            console.log(verifyToken(req.params.data))
+            const isValidToken = verifyToken(req.params.data)
+            res.render('reset-password-ok')
+            
+        } catch (error) {
+            console.log(error)
+            res.redirect('/password_reset')
+        }
+    
     }
 
     async viewStore (req, res, next){
@@ -44,7 +78,6 @@ class ViewController{
             for(let i = 1; i<=cantPages; i++){
                 numbers.push(i)
             }
-    
             if(email == config.admin_email) {
                 return res.render('products', {
                     data: products.docs,
@@ -59,8 +92,8 @@ class ViewController{
                     role: 'ADMIN'
                 })
             } else if(email){
-                const {firstName, lastName, role} = await this.#UserService.findByEmail(email)
-    
+                const user = await this.#UserService.findByEmail(email)
+                
                 res.render('products', {
                     data: products.docs,
                     pages: products.totalPages,
@@ -70,9 +103,11 @@ class ViewController{
                     hasPrevPage: products.hasPrevPage,
                     hasNextPage: products.hasNextPage,
                     paginas: numbers,
-                    firstName,
-                    lastName,
-                    role
+                    firstName: user.firstName,
+                    lastName: user.lastName,
+                    age: user.age,
+                    isAdmin: user.role == 'ADMIN',
+                    profileImg: user.profileImg ? user.profileImg : 'default.jpg'
                 })
             }else{
                 return res.redirect('/login');
@@ -88,9 +123,16 @@ class ViewController{
             if(email){
                 const id = req.params.id
                 const products = await this.#ProductService.getWithId(id)
-    
+                const { firstName, lastName, role } = await this.#UserService.findByEmail(email);
+                console.log(products)
                 res.render('product_detail', {
-                    data: JSON.parse(JSON.stringify(products))
+                    data: JSON.parse(JSON.stringify(products)),
+                    userInfo: {
+                        firstName,
+                        lastName,
+                        role,
+                        isAdmin: role == 'ADMIN'
+                    }
                 })
             }else{
                 return res.redirect('/login')
@@ -102,10 +144,17 @@ class ViewController{
 
     async viewRealTimeProducts (req, res, next){
         try {
+            const { email } = req.user;
             const products = await this.#ProductService.get()
-            
+            const user = await this.#UserService.findByEmail(email)
+
             res.render('realTimeProducts',{
-                data: products
+                data: products,
+                firstName: user.firstName,
+                lastName: user.lastName,
+                age: user.age,
+                isAdmin: user.role == 'ADMIN',
+                profileImg: user.profileImg ? user.profileImg : 'default.jpg'
             })
         } catch (error) {
             next(error)
@@ -114,11 +163,128 @@ class ViewController{
 
     async viewCart(req, res, next){
         try {
-            const cid = req.params.cid
-            const products = await axios.get(`http://localhost:8080/api/carts/${cid}`)
+            const {email} = req.user
+            const user = await this.#UserService.findByEmail(email)
+            const products = await this.#CartService.getWithId(user.cart._id);
+            
+            const purchaseData = {
+                status: req.query.collection_status,
+                payment_id: req.query.payment_id,
+                payment_type: req.query.payment_type,
+                preference_id: req.query.preference_id,
+            }
+            
+            console.log(req.query.collection_status)
 
+            let total = 0;
+
+            products.products.forEach(product => {
+                total += product.product.price * product.quantity
+            })
+                        
             res.render('cart', {
-                data: products.data.products
+                data: products.products,
+                total: total.toLocaleString(),
+                firstName: user.firstName,
+                lastName: user.lastName,
+                age: user.age,
+                isAdmin: user.role == 'ADMIN',
+                profileImg: user.profileImg ? user.profileImg : 'default.jpg'
+            })
+        } catch (error) {
+            next(error)
+        }
+    }
+
+    async viewEditProfile(req, res, next){
+        try {
+            const { email } = req.user
+            if(!email){
+                return res.redirect('/login');
+            }
+    
+            const { firstName, lastName, age, role, profileImg } = await this.#UserService.findByEmail(email);
+            res.render('editprofile', {
+                firstName,
+                lastName,
+                age,
+                isAdmin: role == 'ADMIN',
+                profileImg: profileImg ? profileImg : 'default.jpg'
+            })
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    async paymentSuccess(req, res, next){
+        try {
+            const { email } = req.user;
+            const { firstName, lastName, age, role, profileImg, cart } = await this.#UserService.findByEmail(email);
+            const {
+                payment_id,
+                collection_status,
+                payment_type,
+                preference_id,
+                merchant_order_id,
+            } = req.query
+            
+            if(!payment_id){
+                return res.redirect('/products')
+            }
+
+            const savePayment = await this.#UserService.savePaymentHistory(email, {
+                id: preference_id,
+                collection_status,
+                payment_type,
+                payment_id,
+                merchant_order_id
+            })
+
+            const payment = savePayment.find(pay => pay.id === preference_id);
+            
+            if(payment.status == 'approved'){
+                const deletedCart = await this.#CartService.deleteAllProductToCart(cart._id);
+
+                res.render('pay_status',{
+                    status: payment.status == 'approved',
+                    payment_id: payment.payment_id,
+                    firstName,
+                    lastName,
+                    age,
+                    isAdmin: role == 'ADMIN',
+                    profileImg: profileImg ? profileImg : 'default.jpg'
+                })
+            }else{
+                res.render('pay_status',{
+                    status: payment.status == false,
+                    payment_id: payment.payment_id,
+                    firstName,
+                    lastName,
+                    age,
+                    isAdmin: role == 'ADMIN',
+                    profileImg: profileImg ? profileImg : 'default.jpg'
+                })
+            }
+
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    async viewUserAdministrator(req, res, next){
+        try {
+            const users = await this.#UserService.getAll()
+            const { email } = req.user;
+
+            const user = await this.#UserService.findByEmail(email)
+
+            res.render('usersGestion',{
+                data: users,
+                firstName: user.firstName,
+                lastName: user.lastName,
+                age: user.age,
+                isAdmin: user.role == 'ADMIN',
+                profileImg: user.profileImg ? user.profileImg : 'default.jpg'
             })
         } catch (error) {
             next(error)

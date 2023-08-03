@@ -1,14 +1,9 @@
 <div>
-    {{> header}}
-    <div class="infoUser">
-        <p><span>Bienvenido</span> {{firstName}}</p>
-        <p><span>Rol:</span> {{role}}</p>
-        <button onclick="logout()">Cerrar Sesion</button>
-    </div>
+    {{> header firstName=firstName isAdmin=isAdmin lastName=lastName profileImg=profileImg}}
     <div class="header">
         {{> title titulo="Listado De Productos"}}
         <div class="container-icon">
-            <i class="fa-solid fa-cart-shopping"></i>
+            <a href="/carts"><i class="fa-solid fa-cart-shopping"></i></a>
         </div>
     </div>
         <div class="filters">
@@ -58,7 +53,7 @@
         {{#each data}}
         <div class="item" data-id='{{this._id}}'>
                 <figure>
-                    <img src='./img/{{this.thumbnail}}' alt='{{this.title}}' class="productsImg">
+                    <img src='./img/products/{{this.thumbnail}}' alt='{{this.title}}' class="productsImg">
                 </figure>
                 <div class="info-product">
                     <div class="product-text">
@@ -68,7 +63,11 @@
                     </div>
                     <div class="productsButtons">
                         <button class="verDetalles" id="verDetalles">Ver Detalles</button>
-                        <button class="addToCart" id="addToCart">Agregar al Carrito</button>
+                        {{#if this.status }}
+                            <button class="addToCart" id="addToCart">Agregar al Carrito</button>
+                        {{else}}
+                            <button class="addToCart" id="addToCart" disabled>Sin stock</button>
+                        {{/if}}
                     </div>
                 </div>
             </div>

@@ -7,13 +7,42 @@ class UsersService{
     }
 
     async getAll(){
-        const allUsers = await this.#model.find()
+        const allUsers = await this.#model.find({}, 'firstName lastName email age cart role last_connection profileImg')
         return allUsers
     }
 
     async saveUser(data){
         const { _id } = await this.#model.create(data);
         return _id;
+    }
+
+    async savePaymentId(email, payment, items){
+        const user = await this.findByEmail(email);
+
+        user.paymentsHistory.push({ fecha: new Date() ,...payment });
+
+        // Retorna el usuario guardado
+        const save = await user.save();
+        console.log(save)
+        return save;
+    }
+
+    async savePaymentHistory(email, payment){
+        const user = await this.findByEmail(email);
+
+        const pagoExist = user.paymentsHistory.find(pay => pay.id === payment.id);
+        if(pagoExist){
+            pagoExist.status = payment.collection_status,
+            pagoExist.paymentType = payment.payment_type,
+            pagoExist.payment_id = payment.payment_id,
+            pagoExist.paymentMerchantOrder_id = payment.merchant_order_id
+        }else{
+            return {error: 'No existe ningun pago con ese id'};
+        }
+
+        const save = await user.save();
+
+        return save.paymentsHistory;
     }
 
     async findByEmail(email){
@@ -69,6 +98,31 @@ class UsersService{
     async areDocumentsUploaded(user){
         const areUploaded = user.documents.length < 3 ? false : true;
         return areUploaded;
+    }
+
+    async uploadProfile(user, data){
+
+        if(data.file == 'undefined'){
+            const updatedUser = await this.#model.findOneAndUpdate(
+                { email: user },
+                { $set : { firstName: data.firstName, lastName: data.lastName } },
+                { returnOriginal: false }
+            )
+            return updatedUser
+        }else{
+            console.log(data.file)
+            const updatedUser = await this.#model.findOneAndUpdate(
+                { email: user },
+                { $set : { firstName: data.firstName, lastName: data.lastName, profileImg: data.file } },
+                { returnOriginal: false }
+            )
+            return updatedUser
+        }
+    }
+
+    async deleteUser(uid){
+        const user = await this.#model.findByIdAndDelete(uid)
+        return user
     }
 }
 

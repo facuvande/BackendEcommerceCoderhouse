@@ -6,3 +6,9 @@
 {"level":"error","message":"Error - POST - TypeError: Cannot read properties of null (reading 'email')","timestamp":"2023-07-04T14:29:31.581Z"}
 {"level":"error","message":"Error - POST - TypeError: Cannot read properties of null (reading 'email')","timestamp":"2023-07-04T14:32:00.649Z"}
 {"level":"error","message":"Error - POST - TypeError: Cannot read properties of null (reading 'email')","timestamp":"2023-07-04T14:35:27.002Z"}
+{"level":"error","message":"Error - POST - TypeError: Cannot read properties of undefined (reading '0')","timestamp":"2023-08-02T01:52:24.138Z"}
+{"level":"error","message":"Error - POST - TypeError: Cannot read properties of undefined (reading '0')","timestamp":"2023-08-02T01:53:29.707Z"}
+{"level":"error","message":"Error - POST - TypeError: Cannot read properties of undefined (reading '0')","timestamp":"2023-08-02T01:54:37.524Z"}
+{"level":"error","message":"Error - POST - TypeError: Cannot read properties of undefined (reading '0')","timestamp":"2023-08-02T01:58:53.416Z"}
+{"level":"error","message":"Error - POST - TypeError: Cannot read properties of undefined (reading '0')","timestamp":"2023-08-02T01:59:34.676Z"}
+{"level":"error","message":"Error - POST - Error: El campo code esta repetido","timestamp":"2023-08-02T02:03:17.052Z"}

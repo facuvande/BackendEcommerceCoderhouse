@@ -1,0 +1,28 @@
+<div>
+    {{> header firstName=firstName isAdmin=isAdmin lastName=lastName profileImg=profileImg}}
+    {{> title titulo="Editar perfil"}}
+
+
+    <div class="edit-profile">
+        <div class="user-image">
+            <img id="imagenActual" src="../img/profiles/{{profileImg}}" alt="Imagen del Usuario" width="150">
+        </div>
+        <form id="perfilForm">
+        <label for="file">Foto de perfil:</label>
+        <input type="file" id="file" name="file">
+        <br>
+
+        <label for="firstName">Nombre:</label>
+        <input type="text" id="firstName" name="firstName" value={{firstName}}>
+        <br>
+
+        <label for="lastName">Apellido:</label>
+        <input type="text" id="lastName" name="lastName" value={{lastName}}>
+        <br>
+
+        <button type="button" id="saveChangesButton">Guardar Cambios</button>
+    </form>
+    </div>
+</div>
+
+<script src="../js/editprofile.js"></script>

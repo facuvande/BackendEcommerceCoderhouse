@@ -6,6 +6,8 @@ import ProductRepository from '../repository/product.repository.js';
 import UsersFactory from "../dao/Factorys/users.factory.js";
 import TicketFactory from "../dao/Factorys/ticket.factory.js";
 import logger from '../logger/winston-logger.js';
+import PaymentService from '../dao/Services/payment.service.js';
+import PaymentController from './payment.controller.js'
 
 const Carts = await CartsFactory.getDao()
 const CartService = new CartRepository(new Carts)
@@ -19,16 +21,20 @@ const UsersService = new Users()
 const Tickets = await TicketFactory.getDao()
 const TicketsService = new Tickets();
 
+const PaymentsService = new PaymentController(new PaymentService())
+
 class CartController{
     #service;
     #productService;
     #userService;
     #TicketsService;
+    #PaymentsService;
     constructor(service, productService, usersService, ticketsService){
         this.#service = service;
         this.#productService = productService;
         this.#userService = usersService;
         this.#TicketsService = ticketsService;
+        this.#PaymentsService = PaymentsService;
     }
 
     async create(req, res, next){
@@ -46,7 +52,7 @@ class CartController{
         try {
             const cid = req.params.cid
             
-            const product = await this.#service.getWithId(cid)
+            const products = await this.#service.getWithId(cid)
             
             await (!product) ? res.status(404).send('Id de carrito inexistente') : res.status(201).send(product)
         } catch (error) {
@@ -76,6 +82,30 @@ class CartController{
         }
     }
 
+    async addToCartOutCid(req, res, next){
+        try {
+            const { email } = req.user
+            const user = await this.#userService.findByEmail(email)
+            const pid = req.params.pid
+
+            const product = await this.#productService.getWithId(pid)
+
+            if(!product.status){
+                return res.status(400).send({error: "Producto sin stock"})
+            }
+            
+            if(req.user.email === product.owner){
+                res.status(400).send({error: "No puedes agregar al carrito un producto que te pertenece"})
+            }else{
+                const cart = await this.#service.addProductToCart(user.cart._id, product)
+                res.status(202).send(product)
+            }
+        } catch (error) {
+            logger.error(`Error - ${req.method} - ${error}`)
+            next(error)
+        }
+    }
+
     async deleteProductToCart(req, res, next){
         try {
             const cid = req.params.cid;
@@ -84,6 +114,20 @@ class CartController{
             const deleteProduct = await this.#service.deleteProductToCart(cid, pid)
 
             res.send({eliminado: deleteProduct})
+        } catch (error) {
+            logger.error(`Error - ${req.method} - ${error}`)
+            next(error)
+        }
+    }
+
+    async deleteProductToCartOutCid(req, res, next){
+        try {
+            const pid = req.params.pid;
+            const { email } = req.user;
+            const user = await this.#userService.findByEmail(email)
+
+            const deleteProduct = await this.#service.deleteProductToCart(user.cart._id, pid)
+            res.status(202).send({eliminado: deleteProduct});
         } catch (error) {
             logger.error(`Error - ${req.method} - ${error}`)
             next(error)
@@ -100,6 +144,19 @@ class CartController{
                 logger.error(`Error - ${req.method} - ${error}`)
                 next(error)
             }
+    }
+
+    async deleteAllProductToCartOutCid(req, res, next){
+        try {
+            const { email } = req.user;
+
+            const user = await this.#userService.findByEmail(email)
+            const deleteCart = await this.#service.deleteAllProductToCart(user.cart._id)
+            res.status(202).send({eliminado: deleteCart});
+        } catch (error) {
+            logger.error(`Error - ${req.method} - ${error}`)
+            next(error)
+        }
     }
 
     async updateProductToCart(req, res, next){
@@ -122,68 +179,100 @@ class CartController{
         }
     }
 
-    async purchase(req, res, next){
-        try {
-            const ticket = [];
-            const outOfStock = [];
+    // async purchase(req, res, next){
+    //     try {
+    //         const ticket = [];
+    //         const outOfStock = [];
 
-            const cartToPurchase = await this.#service.getWithId(req.params.cid)
+    //         const { email } = req.user;
+    //         const findUser = await this.#userService.findByEmail(email)
 
-            cartToPurchase.products.forEach(item =>{
-                if(item.quantity <= item.product.stock){
-                    ticket.push(item);
-                    const itemStock = item.product.stock - item.quantity
-                    const editProduct = this.#productService.editProduct(item.product.id, {stock: itemStock})
-                }else{
-                    outOfStock.push(item)
-                }
-            })
+    //         const cartToPurchase = await this.#service.getWithId(findUser.cart)
+
+    //         cartToPurchase.products.forEach(item =>{
+    //             if(item.quantity <= item.product.stock){
+    //                 ticket.push(item);
+
+    //                 const itemStock = item.product.stock - item.quantity
+    //                 const editProduct = this.#productService.editProduct(item.product.id, {stock: itemStock})
+    //             }else{
+    //                 outOfStock.push(item)
+    //             }
+    //         })
             
-            const totalPrice = ticket.reduce((acc, item) =>{
-                const productPrice = item.product.price
-                const quantity = item.quantity
-                const itemTotalPrice = productPrice * quantity
-                return acc + itemTotalPrice
-            }, 0)
+    //         const totalPrice = ticket.reduce((acc, item) =>{
+    //             const productPrice = item.product.price
+    //             const quantity = item.quantity
+    //             const itemTotalPrice = productPrice * quantity
+    //             return acc + itemTotalPrice
+    //         }, 0)
             
-            const purchaser = await this.#userService.findByCart(req.params.cid)
+    //         const purchaser = await this.#userService.findByCart(req.params.cid)
 
-            // Generamos el código de compra
-            const timestamp = Date.now().toString();
-            const randomBytes = crypto.randomBytes(8).toString('hex');
-            const hash = crypto.createHash('sha256').update(timestamp + randomBytes).digest('hex');
-            const code = hash.slice(0, 16);
+    //         // Generamos el código de compra
+    //         const timestamp = Date.now().toString();
+    //         const randomBytes = crypto.randomBytes(8).toString('hex');
+    //         const hash = crypto.createHash('sha256').update(timestamp + randomBytes).digest('hex');
+    //         const code = hash.slice(0, 16);
 
-            const ticketToSend = {
-                code,
-                purchase_datatime: new Date(),
-                amount: totalPrice,
-                purchaser: purchaser.email,
-                cart: req.params.cid,
+    //         const ticketToSend = {
+    //             code,
+    //             purchase_datatime: new Date(),
+    //             amount: totalPrice,
+    //             purchaser: purchaser.email,
+    //             cart: req.params.cid,
+    //         }
+            
+    //         const saveTicket = await this.#TicketsService.generateTicket(ticketToSend)
+    //         const getTicket = await this.#TicketsService.getAll()
+
+    //         // Elimina productos comprados del carrito
+    //         ticket.forEach(async (item) =>{
+    //             const productId = item.product._id
+    //             console.log({item: productId})
+    //             await this.#service.deleteProductToCart(req.params.cid, productId)
+    //         })
+
+    //         if(outOfStock.length > 0){
+    //             return res.status(200).send({ticket: getTicket, productosSinStock: outOfStock})
+    //         }else{
+    //             res.status(200).send({getTicket})
+    //         }
+    //     } catch (error) {
+    //         logger.error(`Error - ${req.method} - ${error}`)
+    //         next(error)
+    //     }
+    // }
+
+    async purchase (req, res, next){
+        const { email } = req.user;
+        const findUser = await this.#userService.findByEmail(email)
+
+        const cartToPurchase = await this.#service.getWithId(findUser.cart)
+
+        const itemsToPurchase = [];
+
+        cartToPurchase.products.forEach(item =>{
+            // Si la cantidad comprada es menor al stock del producto
+            if(item.quantity <= item.product.stock){
+                itemsToPurchase.push({
+                    title: item.product.title,
+                    description: item.product.description,
+                    category_id: item.product.category,
+                    quantity: item.quantity,
+                    unit_price: item.product.price
+                })
+
+                // const itemStock = item.product.stock - item.quantity
+                // const editProduct = this.#productService.editProduct(item.product.id, {stock: itemStock})
             }
-            
-            const saveTicket = await this.#TicketsService.generateTicket(ticketToSend)
-            const getTicket = await this.#TicketsService.getAll()
+        })
 
-            // Elimina productos comprados del carrito
-            ticket.forEach(async (item) =>{
-                const productId = item.product._id
-                console.log({item: productId})
-                await this.#service.deleteProductToCart(req.params.cid, productId)
-            })
-
-            if(outOfStock.length > 0){
-                return res.status(200).send({ticket: getTicket, productosSinStock: outOfStock})
-            }else{
-                res.status(200).send({getTicket})
-            }
-        } catch (error) {
-            logger.error(`Error - ${req.method} - ${error}`)
-            next(error)
-        }
+        req.itemsToPurchase = itemsToPurchase;
+        const payment = await PaymentsService.getPaymentLink(req, res);
     }
 }
 
-const controller = new CartController(CartService, ProductService, UsersService, TicketsService);
+const controller = new CartController(CartService, ProductService, UsersService, TicketsService, PaymentsService);
 export default controller
 

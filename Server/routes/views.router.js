@@ -1,53 +1,21 @@
 import { Router } from 'express'
-import { authenticated, authorized } from '../config/middlewares/auth.js'
+import { authorized } from '../config/middlewares/auth.js'
 import ViewController from '../controllers/view.controller.js'
 import passport from 'passport'
-import { verifyToken } from '../utils/tokenGenerate.js'
-
 
 const route = Router()
 
 // Users views routs
 
-route.get('/', (req, res) =>{
-    res.redirect('/login')
-})
-
-route.get('/register', (req, res) =>{
-    const email = req.user?.email ?? null;
-    if(email){
-        // Si ya existe el dato del email en la session lo redireccionamos al perfil
-        return res.redirect('/products');
-    }
-    res.render('register')
-})
-
-route.get('/login', (req, res) =>{
-    const errorMessage = req.query.error ? 'Email o contrasena incorrectos' : '';
-    const email = req.cookies.current
-
-    if(email){
-        return res.redirect('/products');
-    }
-    res.render('login', { errorMessage })
-})
-
+route.get('/', ViewController.init.bind(ViewController))
+route.get('/register', ViewController.registerPage.bind(ViewController))
+route.get('/login', ViewController.loginPage.bind(ViewController))
 route.get('/password_reset', (req, res) => {
     res.render('reset-password')
 })
-
-route.get('/reset-password-ok/:data', (req, res) => {
-    try {
-        console.log(req.params.data)
-        console.log(verifyToken(req.params.data))
-        const isValidToken = verifyToken(req.params.data)
-        res.render('reset-password-ok')
-        
-    } catch (error) {
-        res.redirect('/password_reset')
-    }
-
-})
+route.get('/reset-password-ok/:data', ViewController.passwordResetOk.bind(ViewController))
+route.get('/edit-profile', passport.authenticate('current', { failureRedirect: '/api/auth/unautorized'}), ViewController.viewEditProfile.bind(ViewController))
+route.get('/users-administrator', passport.authenticate('current', { failureRedirect: '/api/auth/unautorized'}), authorized(['ADMIN']), ViewController.viewUserAdministrator.bind(ViewController))
 
 // Products
 
@@ -60,6 +28,10 @@ route.get('/realtimeproducts', passport.authenticate('current', { failureRedirec
 
 // Carts
 
-route.get('/carts/:cid', passport.authenticate('current', { failureRedirect: '/api/auth/unautorized'}), authorized(['ADMIN']) , ViewController.viewCart.bind(ViewController))
+route.get('/carts', passport.authenticate('current', { failureRedirect: '/api/auth/unautorized'}), authorized(['ADMIN', 'USER']) , ViewController.viewCart.bind(ViewController))
+
+// Payments
+route.get('/payment/success', passport.authenticate('current', { failureRedirect: '/api/auth/unautorized'}), authorized(['ADMIN', 'USER']) , ViewController.paymentSuccess.bind(ViewController))
+
 
 export default route

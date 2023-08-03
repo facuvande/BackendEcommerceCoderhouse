@@ -1,4 +1,5 @@
 export const validateBody = (validator) => (req, res, next) => {
+    console.log(req.body.file)
     const validatedBody =  validator(req.body);
     req.body = validatedBody;
     next();

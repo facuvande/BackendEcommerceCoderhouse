@@ -1,9 +1,54 @@
 <header>
-    <div class="imgContainer">
-        <img src="../img/logo.png" alt="">
-    </div>
-    <ul>
-        <li><a href="/products">Productos</a></li>
-        <li><a href="/realTimeProducts">Real Time Products</a></li>
-    </ul>
+    <nav>
+        <img src="../img/logo.png" alt="" class="logo">
+        <ul>
+            <li><a href="/products">Productos</a></li>
+            {{#if isAdmin}}
+                <li><a href="/realTimeProducts">Gestion Products</a></li>
+                <li><a href="/users-administrator">Gestion Users</a></li>
+            {{/if}}
+        </ul>
+        <img src="../img/profiles/{{profileImg}}" class="user-pic" onclick="toggleMenu()">
+
+        <div class="sub-menu-wrap" id="subMenu">
+            <div class="sub-menu">
+                <div class="user-info">
+                    <img src="../img/profiles/{{profileImg}}">
+                    <h2>{{firstName}} {{lastName}}</h2>
+                </div>
+                <hr>
+
+                <a class="sub-menu-link" href="/edit-profile">
+                    <img src="../img/profile.png">
+                    <p>Editar perfil</p>
+                    <span>></span>
+                </a>
+                <a class="sub-menu-link">
+                    <img src="../img/logout.png">
+                    <p onclick="logout()">Cerrar sesion</p>
+                    <span>></span>
+                </a>
+            </div>
+        </div>
+    </nav>
 </header>
+
+<script>
+    let subMenu = document.getElementById('subMenu');
+
+    function toggleMenu(){
+        subMenu.classList.toggle('open-menu');
+    }
+
+    async function logout(){
+    const response = await fetch('/api/auth/logout', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        }
+    });
+    if(response.redirected){
+        window.location.replace(response.url)
+    }
+}
+</script>

@@ -1,0 +1,23 @@
+<div>
+    {{> header firstName=firstName isAdmin=isAdmin lastName=lastName profileImg=profileImg}}
+    
+    <div class="payStatus_container">
+        {{#if status}}
+            <div class="payStatus_success">
+                <h1>Pago completado con exito!</h1>
+                <p>Gracias por tu compra! Te dejamos datos para que puedas seguir el envio, ademas hemos enviado un email a {{ email }} con el ticket de compra</p>
+                <p>Orden ID: {{payment_id}}</p>
+                <p>Orden Status: <span style="color: green;">Aprobado</span></p>
+            </div>
+        {{else}}
+            <div class="payStatus_success">
+                <h1>Ocurrio un error con el pago!</h1>
+                <p>Lamentablemente ocurrio un error con el pago! Te pedimos que lo intentes nuevamente mas tarde o en caso de no funcionar contactes con un administrador.</p>
+                <p>Orden ID: {{payment_id}}</p>
+                <p>Orden Status: <span style="color: red;">Rechazado</span></p>
+            </div>
+        {{/if}}
+        <a href="/products">Regresar al sitio.</a>
+    </div>
+</div>
+

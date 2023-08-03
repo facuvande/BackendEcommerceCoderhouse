@@ -100,7 +100,32 @@ class UsersController{
             console.log(error);
             res.send({error: 'error'});
         }
-        
+    }
+
+    async uploadProfile(req, res, next){
+        try {
+            const { email } = req.user;
+            const { firstName, lastName } = req.body;
+            const file = req.files[0]
+
+            const updateUser = await this.#service.uploadProfile(email, { firstName, lastName, file: file?.filename });
+            res.status(202).send({success: 'User actualizado correctamente'})
+        } catch (error) {
+            console.log(error)
+            res.send({error: 'error'});
+        }
+    }
+
+    async deleteUser(req, res, next){
+        try {
+            const id = req.params.id
+            const deleteUser = await this.#service.deleteUser(id)
+
+            return deleteUser ? res.status(202).send({success: 'Usuario eliminado correctamente'}) : res.status(400).send({error: 'Usuario inexistente'})
+        } catch (error) {
+            console.log(error)
+            res.send({error: 'error'});
+        }
     }
 }
 

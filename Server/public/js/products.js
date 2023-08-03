@@ -60,20 +60,46 @@ document.addEventListener('click', e =>{
     }
 
     if(e.target.matches('.addToCart')){
-        // Proximamente cuando nos expliquen a sacar el cartId
+        const productId = (e.target.parentElement.parentElement.parentElement.dataset.id)
+        saveProduct(productId)
     }
 })
 
-async function logout(){
-    const response = await fetch('/api/auth/logout', {
+async function saveProduct(pid){
+    const response = await fetch(`/api/carts/product/${pid}`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         }
-    });
-    if(response.redirected){
-        window.location.replace(response.url)
+    })
+
+    if(response.ok){
+        Toastify({
+            text: "Producto agregado al carrito",
+            duration: 3000,
+            close: true,
+            gravity: "bottom", // `top` or `bottom`
+            position: "right", // `left`, `center` or `right`
+            stopOnFocus: true, // Prevents dismissing of toast on hover
+            style: {
+                background: "linear-gradient(to right, #00b09b, #96c93d)",
+            },
+        }).showToast();
+    }else{
+        const responseData = await response.json();
+        Toastify({
+            text: 'Ocurrio un error, porfavor intentarlo mas tarde',
+            duration: 3000,
+            close: true,
+            gravity: "bottom", // `top` or `bottom`
+            position: "right", // `left`, `center` or `right`
+            stopOnFocus: true, // Prevents dismissing of toast on hover
+            style: {
+                background: "linear-gradient(to right, #D71313, #B31312)",
+            },
+        }).showToast();
     }
+
 }
 
 document.addEventListener('DOMContentLoaded', function(e){

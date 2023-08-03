@@ -42,5 +42,15 @@ export default class UserRepository{
         const result = await this.dao.areDocumentsUploaded(user);
         return result
     }
+
+    async uploadProfile(user, data){
+        const result = await this.dao.uploadProfile(user, data);
+        return result
+    }
+
+    async deleteUser(uid){
+        const result = await this.dao.deleteUser(uid);
+        return result
+    }
     
 }

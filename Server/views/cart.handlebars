@@ -1,13 +1,22 @@
 <div>
-    {{> header}}
-    {{> title titulo="Cart"}}
-    <div class="section products_container">
-        {{#each data}}
-            <div class="product">
-                <h2>{{this.product.title}}</h2>
-                <p class="price">${{this.product.price}}</h2>
-                <p class="price">cantidad: {{this.quantity}}</p>
-            </div>
-        {{/each}}
+    {{> header firstName=firstName isAdmin=isAdmin lastName=lastName profileImg=profileImg}}
+    <div class="cart-container">
+        {{> title titulo="Tu carrito"}}
+        <div class="cart-items">
+            {{#each data}}
+                <div class="cart-item" data-id={{ this.product._id }}>
+                    <img src="../img/products/{{this.product.thumbnail}}" alt="{{this.product.title}}">
+                    <h2>{{this.product.title}}</h2>
+                    <p class="price">${{this.product.price}}</h2>
+                    <p class="price">cantidad: {{this.quantity}}</p>
+                    <button onclick="deleteProduct(event)">X</button>
+                </div>
+            {{/each}}
+            <h3>Total: ${{total}}</h3>
+            <button onclick="purchase(event)">Finalizar compra</button>
+            <button onclick="clearAllItems()">Vaciar carrito</button>
+        </div>
     </div>
 </div>
+
+<script src="./js/cart.js"></script>
