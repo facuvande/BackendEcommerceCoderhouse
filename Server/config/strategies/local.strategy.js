@@ -22,7 +22,7 @@ export function localStrategy(){
             const userExists = await usersModel.findOne({email: username})
 
             if(userExists){
-                return done(error, false);
+                return done(null, false);
             }
             
             const cartCreate = await CartService.create()
