@@ -1,15 +1,22 @@
 import UsersService from "../dao/Services/users.service.js";
 import ProductService from "../dao/Services/products.service.js";
+import TicketFactory from "../dao/Factorys/ticket.factory.js";
 import CartService from '../dao/Services/carts.service.js'
 import config from "../config.js";
+import { emailService } from "../external-services/email.service.js";
 import { verifyToken } from "../utils/tokenGenerate.js";
+
+const Tickets = await TicketFactory.getDao()
+const TicketsService = new Tickets();
 class ViewController{
     #CartService
     #ProductService
     #UserService
-    constructor(CartService, ProductService, UserService){
+    #TicketsService;
+    constructor(CartService, ProductService, UserService, ticketsService){
         this.#CartService = CartService;
         this.#ProductService = ProductService;
+        this.#TicketsService = ticketsService;
         this.#UserService = UserService;
     }
 
@@ -242,8 +249,22 @@ class ViewController{
 
             const payment = savePayment.find(pay => pay.id === preference_id);
             
+            const totalPrice = payment.items.reduce((acc, item) => acc + (item.unit_price * item.quantity), 0)
+
             if(payment.status == 'approved'){
                 const deletedCart = await this.#CartService.deleteAllProductToCart(cart._id);
+        
+                const ticketToSend = {
+                    code: payment.payment_id,
+                    purchase_datatime: new Date(),
+                    amount: totalPrice,
+                    purchaser: email,
+                }
+        
+                const saveTicket = await this.#TicketsService.generateTicket(ticketToSend)
+                console.log(saveTicket)
+                await emailService.sendEmail({ to: email, subject: 'Muchas gracias por tu compra, adjuntamos el ticket', html: `Ticket de compra: ${saveTicket}`})
+
 
                 res.render('pay_status',{
                     status: payment.status == 'approved',
@@ -292,5 +313,5 @@ class ViewController{
     }
 }
 
-const controller = new ViewController(new CartService(),new ProductService(),new UsersService());
+const controller = new ViewController(new CartService(),new ProductService(),new UsersService(), TicketsService);
 export default controller

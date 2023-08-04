@@ -12,3 +12,4 @@
 {"level":"error","message":"Error - POST - TypeError: Cannot read properties of undefined (reading '0')","timestamp":"2023-08-02T01:58:53.416Z"}
 {"level":"error","message":"Error - POST - TypeError: Cannot read properties of undefined (reading '0')","timestamp":"2023-08-02T01:59:34.676Z"}
 {"level":"error","message":"Error - POST - Error: El campo code esta repetido","timestamp":"2023-08-02T02:03:17.052Z"}
+{"level":"error","message":"Error - DELETE - TypeError: Cannot read properties of undefined (reading 'sendEmail')","timestamp":"2023-08-03T22:37:33.841Z"}

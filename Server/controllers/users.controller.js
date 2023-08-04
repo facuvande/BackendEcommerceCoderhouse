@@ -32,6 +32,22 @@ class UsersController{
         }
     }
 
+    async getOne(req, res, next){
+        try {
+            const email = req.params.email
+
+            const user = await this.#service.getOne(email);
+            if(user){
+                res.status(202).send(user)
+            }else{
+                res.status(400).send({error: 'Usuario no encontrado'})
+            }
+        } catch (error) {
+            logger.error(`Error - ${req.method} - ${error}`)
+            next(error)
+        }
+    }
+
     async saveUser(req, res, next){
         const user = req.body
 

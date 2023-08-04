@@ -31,6 +31,11 @@ html {
     background-color: green;
 }
 
+nav h1{
+    font-size: 1rem;
+    color: white;
+}
+
 .title{
     text-align: center;
 }
@@ -41,12 +46,30 @@ body {
     padding: 0;
     overflow-x: hidden;
     font-family: 'Open Sans', sans-serif;
+    position: relative;
+    padding-bottom: 15.5em;
+    min-height: 100vh;
 }
 
 img,
 video {
     max-width: 100%;
     height: auto;
+}
+
+/* Footer */
+footer{
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    background-color: #1a1a1a;
+    text-align: center;
+    font-size: 18px;
+    color: white;
+    padding: 15px;
+}
+footer a{
+    color: white;
 }
 
 /* Header */

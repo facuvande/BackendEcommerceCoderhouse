@@ -18,12 +18,12 @@
             <tbody id="tbody">
                 {{#each data}}
                     <tr data-id={{this._id}}>
-                        <td data-label="Producto">{{this.firstName}}</td>
-                        <td data-label="Descripcion">{{this.lastName}}</td>
-                        <td data-label="Precio">{{this.email}}</td>
-                        <td data-label="Stock">{{this.age}}</td>
-                        <td data-label="Categoria">{{this.role}}</td>
-                        <td data-label="Code">{{this.last_connection}}</td>
+                        <td data-label="Nombre">{{this.firstName}}</td>
+                        <td data-label="Apellido">{{this.lastName}}</td>
+                        <td data-label="Email">{{this.email}}</td>
+                        <td data-label="Edad">{{this.age}}</td>
+                        <td data-label="Rol">{{this.role}}</td>
+                        <td data-label="Ult. conexion">{{this.last_connection}}</td>
                         <td data-label="Opciones">
                             <button class="change-role">Editar Rol</button>
                             <button class="delete">Eliminar</button>
@@ -32,7 +32,30 @@
                 {{/each}}
             </tbody>
         </table>
+        <form style="margin-top: 65px; margin-bottom: 25px">
+            <label for="emailBusqueda">Buscar usuario por correo electronico:</label>
+            <input type="emailv" id="emailBusqueda" name="emailBusqueda" placeholder="Ingrese el correo electronico del usuario">
+            <button onclick="buscarUser(event)">Buscar</button>
+        </form>
+            <table class="table">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Apellido</th>
+                    <th>Email</th>
+                    <th>Edad</th>
+                    <th>Rol</th>
+                    <th>Ult. conexion</th>
+                    <th>Opciones</th>
+                </tr>
+            </thead>
+            <tbody id="tbodyUser">
+                
+            </tbody>
+        </table>
+
     </div>
+    {{> footer}}
 </div>
 
 <script src="js/usersGestion.js"></script>

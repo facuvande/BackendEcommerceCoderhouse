@@ -52,7 +52,7 @@ class CartController{
         try {
             const cid = req.params.cid
             
-            const products = await this.#service.getWithId(cid)
+            const product = await this.#service.getWithId(cid)
             
             await (!product) ? res.status(404).send('Id de carrito inexistente') : res.status(201).send(product)
         } catch (error) {
@@ -179,71 +179,6 @@ class CartController{
         }
     }
 
-    // async purchase(req, res, next){
-    //     try {
-    //         const ticket = [];
-    //         const outOfStock = [];
-
-    //         const { email } = req.user;
-    //         const findUser = await this.#userService.findByEmail(email)
-
-    //         const cartToPurchase = await this.#service.getWithId(findUser.cart)
-
-    //         cartToPurchase.products.forEach(item =>{
-    //             if(item.quantity <= item.product.stock){
-    //                 ticket.push(item);
-
-    //                 const itemStock = item.product.stock - item.quantity
-    //                 const editProduct = this.#productService.editProduct(item.product.id, {stock: itemStock})
-    //             }else{
-    //                 outOfStock.push(item)
-    //             }
-    //         })
-            
-    //         const totalPrice = ticket.reduce((acc, item) =>{
-    //             const productPrice = item.product.price
-    //             const quantity = item.quantity
-    //             const itemTotalPrice = productPrice * quantity
-    //             return acc + itemTotalPrice
-    //         }, 0)
-            
-    //         const purchaser = await this.#userService.findByCart(req.params.cid)
-
-    //         // Generamos el código de compra
-    //         const timestamp = Date.now().toString();
-    //         const randomBytes = crypto.randomBytes(8).toString('hex');
-    //         const hash = crypto.createHash('sha256').update(timestamp + randomBytes).digest('hex');
-    //         const code = hash.slice(0, 16);
-
-    //         const ticketToSend = {
-    //             code,
-    //             purchase_datatime: new Date(),
-    //             amount: totalPrice,
-    //             purchaser: purchaser.email,
-    //             cart: req.params.cid,
-    //         }
-            
-    //         const saveTicket = await this.#TicketsService.generateTicket(ticketToSend)
-    //         const getTicket = await this.#TicketsService.getAll()
-
-    //         // Elimina productos comprados del carrito
-    //         ticket.forEach(async (item) =>{
-    //             const productId = item.product._id
-    //             console.log({item: productId})
-    //             await this.#service.deleteProductToCart(req.params.cid, productId)
-    //         })
-
-    //         if(outOfStock.length > 0){
-    //             return res.status(200).send({ticket: getTicket, productosSinStock: outOfStock})
-    //         }else{
-    //             res.status(200).send({getTicket})
-    //         }
-    //     } catch (error) {
-    //         logger.error(`Error - ${req.method} - ${error}`)
-    //         next(error)
-    //     }
-    // }
-
     async purchase (req, res, next){
         const { email } = req.user;
         const findUser = await this.#userService.findByEmail(email)
@@ -262,9 +197,6 @@ class CartController{
                     quantity: item.quantity,
                     unit_price: item.product.price
                 })
-
-                // const itemStock = item.product.stock - item.quantity
-                // const editProduct = this.#productService.editProduct(item.product.id, {stock: itemStock})
             }
         })
 

@@ -12,6 +12,8 @@ const route = authRoute();
 
 // Traemos todos los usuarios
 route.authGet('/', [roles.ADMIN, roles.USER], usersController.getAll.bind(usersController))
+// Traemos un solo usuario
+route.authGet('/:email', [roles.ADMIN], usersController.getOne.bind(usersController))
 // Eliminar usuario
 route.authDelete('/:id', [roles.ADMIN], validateParams(validator(Id)), usersController.deleteUser.bind(usersController))
 // Guardar usuario

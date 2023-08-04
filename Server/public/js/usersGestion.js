@@ -104,6 +104,48 @@ document.addEventListener('click', async e =>{
     }
 })
 
+async function buscarUser(event){
+    event.preventDefault()
+    const $tbody = document.getElementById('tbodyUser')
+    const $input = document.getElementById('emailBusqueda').value.toLowerCase()
+    
+    if($input === ''){
+        return;
+    }
+    
+    const response = await fetch(`/api/users/${$input}`, {
+        method: 'GET',
+        headers: {},
+    })
+
+    
+    if(response.ok){
+        const data = await response.json()
+        $tbody.innerHTML = ``
+        $tbody.innerHTML = `
+            <tr data-id=${data._id}>
+                <td data-label="Nombre">${data.firstName}</td>
+                <td data-label="Apellido">${data.lastName}</td>
+                <td data-label="Email">${data.email}</td>
+                <td data-label="Edad">${data.age}</td>
+                <td data-label="Rol">${data.role}</td>
+                <td data-label="Ult. conexion">${data.last_connection}</td>
+                <td data-label="Opciones">
+                    <button class="change-role">Editar Rol</button>
+                    <button class="delete">Eliminar</button>
+                </td>
+            </tr>
+        `
+    }else{
+        $tbody.innerHTML = ``
+        $tbody.innerHTML = `
+            <tr>
+                <td data-label="Nombre">No se encontro el usuario</td>
+            </tr>
+        `
+    }
+}
+
 function limpiarHtml(){
     $tbody.innerHTML = ``
 }

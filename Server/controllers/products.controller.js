@@ -2,14 +2,17 @@ import roles from '../config/roles.js';
 import ProductsFactory from '../dao/Factorys/products.factory.js';
 import logger from '../logger/winston-logger.js';
 import ProductRepository from '../repository/product.repository.js';
+import { emailService } from '../external-services/email.service.js';
 
 const Products = await ProductsFactory.getDao()
 const ProductService = new ProductRepository(new Products)
 
 class ProductsController{
     #service;
-    constructor(service){
+    #emailService;
+    constructor(service, emailservice){
         this.#service = service;
+        this.#emailService = emailservice;
     }
 
     async save (req, res, next){
@@ -157,6 +160,15 @@ class ProductsController{
                 }
             }else{
                 // Si es ADMIN elimina cualquier producto
+                const { owner, title } = await this.#service.getWithId(idProduct)
+                console.log(owner)
+                await this.#emailService.sendEmail(
+                    {
+                        from: `"Tu producto ${title} fue eliminado" <facundovs84@hotmail.com.ar>`, 
+                        to: owner, 
+                        subject: 'Tu producto fue eliminado por un administrador.', 
+                        html: `Lamentablemente por algun motivo tu producto fue eliminado por un administrador, porfavor deje de subir productos que no cumplan con las normas de la pagina.`
+                })
                 const Product = await this.#service.deleteProduct(idProduct)
                 res.status(201).send({'Exito al eliminar el producto': idProduct})
             }
@@ -167,6 +179,6 @@ class ProductsController{
     }
 }
 
-const controller = new ProductsController(ProductService);
+const controller = new ProductsController(ProductService, emailService);
 export default controller
 

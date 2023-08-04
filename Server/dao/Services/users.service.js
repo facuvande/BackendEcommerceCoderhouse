@@ -11,6 +11,11 @@ class UsersService{
         return allUsers
     }
 
+    async getOne(email){
+        const user = await this.#model.findOne({email: email}, 'firstName lastName email age cart role last_connection profileImg');
+        return user;
+    }
+
     async saveUser(data){
         const { _id } = await this.#model.create(data);
         return _id;

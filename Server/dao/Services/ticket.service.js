@@ -1,5 +1,4 @@
 import ticketModel from "../models/ticket.model.js";
-
 class TicketMemoryService{
     #model
     constructor(){
@@ -7,9 +6,8 @@ class TicketMemoryService{
     }
 
     async generateTicket(data){
-        console.log(data)
-        const { _id } = await this.#model.create(data);
-        return _id;
+        const ticket = await this.#model.create(data);
+        return ticket;
     }
 
     async getAll(){

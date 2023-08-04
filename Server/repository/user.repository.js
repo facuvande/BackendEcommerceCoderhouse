@@ -8,6 +8,11 @@ export default class UserRepository{
         return result
     }
 
+    async getOne(email){
+        const result = await this.dao.getOne(email)
+        return result
+    }
+
     async saveUser(data){
         const result = this.dao.saveUser(data);
         return result
