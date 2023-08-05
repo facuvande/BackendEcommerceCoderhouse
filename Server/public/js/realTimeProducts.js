@@ -27,7 +27,6 @@ function mostrarHtml(){
             <td data-label="Code">${el.code}</td>
             <td data-label="Opciones">
                 <button class="delete">Eliminar</button>
-                <button>Editar</button>
             </td>
         `
         $fragment.appendChild(tr)

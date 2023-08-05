@@ -40,4 +40,14 @@ export default class ProductRepository{
         const result = await this.dao.deleteProduct(idProduct);
         return result;
     }
+
+    async updateStock(idProduct, newStock){
+        const result = await this.dao.updateStock(idProduct, newStock);
+        return result;
+    }
+
+    async changeStatusToFalse(idProduct){
+        const result = await this.dao.changeStatusToFalse(idProduct);
+        return result;
+    }
 }

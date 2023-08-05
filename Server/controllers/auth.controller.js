@@ -3,6 +3,7 @@ import usersModel from "../dao/models/users.model.js";
 import UsersFactory from "../dao/Factorys/users.factory.js";
 import { emailService } from "../external-services/email.service.js";
 import { createHash, isValidPassword } from "../utils/crypto.js";
+import config from "../config.js";
 
 const Users = await UsersFactory.getDao()
 const UsersService = new Users()
@@ -36,8 +37,10 @@ class AuthController{
     async logout(req, res, next){
         const user = req.user
 
-        // Hacer que se actualice la ultima conexion 
-        await usersModel.updateOne({ _id: user._id }, { $set: { last_connection: new Date() }});
+        if(user.email !== config.admin_email){
+            // Hacer que se actualice la ultima conexion 
+            await usersModel.updateOne({ _id: user._id }, { $set: { last_connection: new Date() }});
+        }
 
         res.clearCookie('current');
         res.clearCookie('connect.sid')

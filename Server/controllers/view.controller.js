@@ -96,7 +96,10 @@ class ViewController{
                     hasNextPage: products.hasNextPage,
                     paginas: numbers,
                     firstName: 'Administrador',
-                    role: 'ADMIN'
+                    lastName: '',
+                    age: 22,
+                    isAdmin: true,
+                    profileImg: 'default.jpg'
                 })
             } else if(email){
                 const user = await this.#UserService.findByEmail(email)
@@ -127,10 +130,10 @@ class ViewController{
     async viewDetailsProduct(req, res, next){
         try {
             const email = req.user?.email ?? null
-            if(email){
+            if(email && email != config.admin_email){
                 const id = req.params.id
                 const products = await this.#ProductService.getWithId(id)
-                const { firstName, lastName, role } = await this.#UserService.findByEmail(email);
+                const { firstName, lastName, role, profileImg } = await this.#UserService.findByEmail(email);
                 console.log(products)
                 res.render('product_detail', {
                     data: JSON.parse(JSON.stringify(products)),
@@ -138,7 +141,22 @@ class ViewController{
                         firstName,
                         lastName,
                         role,
-                        isAdmin: role == 'ADMIN'
+                        isAdmin: role == 'ADMIN',
+                        profileImg: profileImg ? profileImg : 'default.jpg'
+                    }
+                })
+            }else if(email == config.admin_email){
+                const id = req.params.id
+                const products = await this.#ProductService.getWithId(id)
+
+                res.render('product_detail', {
+                    data: JSON.parse(JSON.stringify(products)),
+                    userInfo: {
+                        firstName: 'Administrador',
+                        lastName: '',
+                        role: 'ADMIN',
+                        isAdmin: true,
+                        profileImg: 'default.jpg',
                     }
                 })
             }else{
@@ -153,13 +171,23 @@ class ViewController{
         try {
             const { email } = req.user;
             const products = await this.#ProductService.get()
-            const user = await this.#UserService.findByEmail(email)
+            if(email == config.admin_email){
+                return res.render('realTimeProducts', {
+                    data: products,
+                    firstName: 'Administrador',
+                    lastName: '',
+                    age: 22,
+                    isAdmin: true,
+                    profileImg: 'default.jpg'
+                })
+            }
 
+            const user = await this.#UserService.findByEmail(email)
             res.render('realTimeProducts',{
                 data: products,
-                firstName: user.firstName,
-                lastName: user.lastName,
-                age: user.age,
+                firstName: user.firstName ?? 'undefined',
+                lastName: user.lastName ?? 'undefined',
+                age: user.age ?? 'undefined',
                 isAdmin: user.role == 'ADMIN',
                 profileImg: user.profileImg ? user.profileImg : 'default.jpg'
             })
@@ -171,6 +199,18 @@ class ViewController{
     async viewCart(req, res, next){
         try {
             const {email} = req.user
+
+            if(email == config.admin_email){
+                return res.render('cart', {
+                    data: {},
+                    firstName: 'Administrador',
+                    lastName: '',
+                    age: 22,
+                    isAdmin: true,
+                    profileImg: 'default.jpg'
+                })
+            }
+
             const user = await this.#UserService.findByEmail(email)
             const products = await this.#CartService.getWithId(user.cart._id);
             
@@ -208,6 +248,8 @@ class ViewController{
             const { email } = req.user
             if(!email){
                 return res.redirect('/login');
+            }else if(email == config.admin_email){
+                return res.redirect('/products')
             }
     
             const { firstName, lastName, age, role, profileImg } = await this.#UserService.findByEmail(email);
@@ -252,7 +294,20 @@ class ViewController{
             const totalPrice = payment.items.reduce((acc, item) => acc + (item.unit_price * item.quantity), 0)
 
             if(payment.status == 'approved'){
-                const deletedCart = await this.#CartService.deleteAllProductToCart(cart._id);
+                const products = await this.#CartService.getWithId(cart._id);
+                const productsCart = products.products;
+
+                console.log(productsCart)
+                const restStock = productsCart.map(async product => {
+                    const { stock } = await this.#ProductService.getWithId(product.product._id);
+                    const newStock = stock - product.quantity;
+                    if(newStock == 0){
+                        const changeStatus = await this.#ProductService.changeStatusToFalse(product.product._id);
+                    }
+                    const updateStock = await this.#ProductService.updateStock(product.product._id, newStock);
+                    return updateStock;
+                })
+                // const deletedCart = await this.#CartService.deleteAllProductToCart(cart._id);
         
                 const ticketToSend = {
                     code: payment.payment_id,
@@ -261,9 +316,9 @@ class ViewController{
                     purchaser: email,
                 }
         
-                const saveTicket = await this.#TicketsService.generateTicket(ticketToSend)
-                console.log(saveTicket)
-                await emailService.sendEmail({ to: email, subject: 'Muchas gracias por tu compra, adjuntamos el ticket', html: `Ticket de compra: ${saveTicket}`})
+                // const saveTicket = await this.#TicketsService.generateTicket(ticketToSend)
+                // console.log(saveTicket)
+                // await emailService.sendEmail({ to: email, subject: 'Muchas gracias por tu compra, adjuntamos el ticket', html: `Ticket de compra: ${saveTicket}`})
 
 
                 res.render('pay_status',{
@@ -296,6 +351,17 @@ class ViewController{
         try {
             const users = await this.#UserService.getAll()
             const { email } = req.user;
+
+            if(email == config.admin_email){
+                return res.render('usersGestion', {
+                    data: users,
+                    firstName: 'Administrador',
+                    lastName: '',
+                    age: 22,
+                    isAdmin: true,
+                    profileImg: 'default.jpg'
+                })
+            }
 
             const user = await this.#UserService.findByEmail(email)
 

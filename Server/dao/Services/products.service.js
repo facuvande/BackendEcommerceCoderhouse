@@ -39,6 +39,19 @@ class ProductService{
         const product = await this.#model.findOneAndDelete({_id: id});
         return id
     }
+
+    async updateStock(id, newStock){
+        const product = await this.#model.findOneAndUpdate({_id: id}, {stock: newStock}, {new: true});
+        if(newStock > 0){
+            await this.#model.findOneAndUpdate({_id: id}, {status: true}, {new: true});
+        }
+        return product
+    }
+
+    async changeStatusToFalse(id){
+        const change = await this.#model.findOneAndUpdate({_id: id}, {status: false}, {new: true});
+        return change
+    }
 }
 
 export default ProductService
