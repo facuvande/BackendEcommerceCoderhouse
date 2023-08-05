@@ -143,6 +143,18 @@ class UsersController{
             res.send({error: 'error'});
         }
     }
+
+    async deleteInactiveUsers(req, res, next){
+        try {
+            const deleteInactive = await this.#service.deleteInactiveUsers()
+            console.log(deleteInactive);
+
+            return res.status(202).send({success: 'Usuarios inactivos eliminados correctamente'})
+        } catch (error) {
+            console.log(error);
+            res.send({error: 'error'})
+        }
+    }
 }
 
 const controller = new UsersController(usersService, cartsService);

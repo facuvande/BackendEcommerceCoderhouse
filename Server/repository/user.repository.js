@@ -57,5 +57,10 @@ export default class UserRepository{
         const result = await this.dao.deleteUser(uid);
         return result
     }
+
+    async deleteInactiveUsers(){
+        const result = await this.dao.deleteInactiveUsers();
+        return result
+    }
     
 }

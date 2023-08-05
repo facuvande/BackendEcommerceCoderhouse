@@ -17,6 +17,7 @@ import errorMiddleware from './config/middlewares/error.middleware.js'
 import customResponseMiddleware from './config/middlewares/custom-response.middleware.js'
 import spec from './docs/swagger-options.js'
 import swaggerUiExpress from 'swagger-ui-express'
+import initCron from './utils/cron.js'
 
 const { __dirname } = fileDirName(import.meta)
 
@@ -46,6 +47,9 @@ app.use(express.json())
 app.use(express.urlencoded({extended:true}))
 app.use(express.static(__dirname + '/public'));
 app.use(customResponseMiddleware)
+
+// Node-cron
+initCron();
 
 // Rutas
 //? Todo lo que son vistas

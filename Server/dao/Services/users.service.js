@@ -129,6 +129,15 @@ class UsersService{
         const user = await this.#model.findByIdAndDelete(uid)
         return user
     }
+
+    async deleteInactiveUsers(){
+        const twoDaysAgo = new Date();
+        twoDaysAgo.setDate(twoDaysAgo.getDate() - 2);
+
+        // Actualizacion masiva para eliminar users inactivos
+        const result = await this.#model.deleteMany({ last_connection: { $lte: twoDaysAgo } })
+        return result;
+    }
 }
 
 export default UsersService

@@ -12,6 +12,8 @@ const route = authRoute();
 
 // Traemos todos los usuarios
 route.authGet('/', [roles.ADMIN, roles.USER], usersController.getAll.bind(usersController))
+// Eliminar usuarios inactivos hace 2 o mas dias
+route.authDelete('/inactive', [roles.ADMIN], usersController.deleteInactiveUsers.bind(usersController))
 // Traemos un solo usuario
 route.authGet('/:email', [roles.ADMIN], usersController.getOne.bind(usersController))
 // Eliminar usuario
