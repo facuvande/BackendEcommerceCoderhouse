@@ -6,7 +6,6 @@ const route = Router()
 
 route.get('/current', passport.authenticate('current'), async (req, res, next) =>{
     const user = req.user;
-    console.log(user)
     // Validar y transformar el objeto user usando currentDto
     const validatedUser = new CurrentUserDto(user)
 

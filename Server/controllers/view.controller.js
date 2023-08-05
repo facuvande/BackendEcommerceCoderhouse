@@ -300,7 +300,7 @@ class ViewController{
                     const updateStock = await this.#ProductService.updateStock(product.product._id, newStock);
                     return updateStock;
                 })
-                // const deletedCart = await this.#CartService.deleteAllProductToCart(cart._id);
+                const deletedCart = await this.#CartService.deleteAllProductToCart(cart._id);
         
                 const ticketToSend = {
                     code: payment.payment_id,
@@ -309,9 +309,8 @@ class ViewController{
                     purchaser: email,
                 }
         
-                // const saveTicket = await this.#TicketsService.generateTicket(ticketToSend)
-                // await emailService.sendEmail({ to: email, subject: 'Muchas gracias por tu compra, adjuntamos el ticket', html: `Ticket de compra: ${saveTicket}`})
-
+                const saveTicket = await this.#TicketsService.generateTicket(ticketToSend)
+                await emailService.sendEmail({ to: email, subject: 'Muchas gracias por tu compra, adjuntamos el ticket', html: `Ticket de compra: ${saveTicket}`})
 
                 res.render('pay_status',{
                     status: payment.status == 'approved',
