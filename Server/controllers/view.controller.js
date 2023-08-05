@@ -326,6 +326,7 @@ class ViewController{
                     payment_id: payment.payment_id,
                     firstName,
                     lastName,
+                    email,
                     age,
                     isAdmin: role == 'ADMIN',
                     profileImg: profileImg ? profileImg : 'default.jpg'
@@ -336,6 +337,7 @@ class ViewController{
                     payment_id: payment.payment_id,
                     firstName,
                     lastName,
+                    email,
                     age,
                     isAdmin: role == 'ADMIN',
                     profileImg: profileImg ? profileImg : 'default.jpg'

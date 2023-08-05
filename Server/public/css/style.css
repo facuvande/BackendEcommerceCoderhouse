@@ -800,3 +800,22 @@ header nav ul li a {
     font-size: 18px;
     margin-right: 5px;
 }
+
+/* Pay status */
+
+.payStatus_container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+    padding: 47px;
+    margin-top: 75px;
+    font-family: Arial, Helvetica, sans-serif;
+    border-radius: 10px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.20);
+}
+
+.payStatus_container a{
+    color: #11a3cf;
+    text-decoration: none;
+}
