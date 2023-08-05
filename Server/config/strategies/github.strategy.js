@@ -21,7 +21,7 @@ export function githubStrategy(){
             if(!user){
 
                 const cartCreate = await CartService.create()
-
+                console.log(cartCreate)
                 const newUser = await usersModel.create({
                     email,
                     firstName: profile._json.name,
