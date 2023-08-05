@@ -81,7 +81,7 @@ class AuthController{
                 email: req.body.email
             })
             console.log(token)
-            const resetPasswordUrl = `http://localhost:8080/reset-password-ok/${token}`
+            const resetPasswordUrl = `https://backendecommercecoderhouse-production.up.railway.app/reset-password-ok/${token}`
         
             await this.#emailService.sendEmail(
                 {

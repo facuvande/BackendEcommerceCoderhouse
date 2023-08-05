@@ -11,9 +11,9 @@ export default class PaymentService{
                 ...itemsToPurchase
             ],
             back_urls: {
-                failure: 'http://localhost:8080/payment/failure',
-                pending: 'http://localhost:8080/payment/pending',
-                success: 'http://localhost:8080/payment/success',
+                failure: 'https://backendecommercecoderhouse-production.up.railway.app/payment/failure',
+                pending: 'https://backendecommercecoderhouse-production.up.railway.app/payment/pending',
+                success: 'https://backendecommercecoderhouse-production.up.railway.app/payment/success',
             }
         }
 
