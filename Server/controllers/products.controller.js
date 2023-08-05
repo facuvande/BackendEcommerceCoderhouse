@@ -17,13 +17,8 @@ class ProductsController{
 
     async save (req, res, next){
         try {
-            // console.log({usuario: req.user})
             const producto = req.body;
-            console.log('Body del producto')
-            console.log(req.body)
             const img = req.files
-            console.log('Img del producto')
-            console.log(req.files)
             
             // Debido a que si ponemos mas de una imagen req.files me otorga 2 objetos 1 por imagen, no puedo acceder con req.files.filename por lo tanto uso este metodo para extraer sus respectivos filename y guardarlo en la constante filenames
             const filenames = []
@@ -104,7 +99,7 @@ class ProductsController{
             })
             } catch (error) {
             logger.error(`Error - ${req.method} - ${error}`)
-                next(error)
+            next(error)
         }
     }
 
@@ -161,7 +156,7 @@ class ProductsController{
             }else{
                 // Si es ADMIN elimina cualquier producto
                 const { owner, title } = await this.#service.getWithId(idProduct)
-                console.log(owner)
+
                 await this.#emailService.sendEmail(
                     {
                         from: `"Tu producto ${title} fue eliminado" <facundovs84@hotmail.com.ar>`, 

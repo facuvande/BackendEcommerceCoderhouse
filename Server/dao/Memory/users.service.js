@@ -20,7 +20,6 @@ class UsersMemoryService{
 
     async findByEmail(email){
         try {
-            console.log(email)
             const userEmail = this.#users.find(user => user.email === email)
             if(userEmail){
                 return userEmail

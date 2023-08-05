@@ -3,7 +3,6 @@ saveButton.addEventListener('click', updateUserInfo);
 
 async function updateUserInfo(event){
     event.preventDefault();
-    console.log('click')
 
     const form = document.getElementById('perfilForm');
     const formData = new FormData(form);

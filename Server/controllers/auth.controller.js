@@ -48,7 +48,6 @@ class AuthController{
     }
 
     async register(req, res, next){
-        console.log('entra')
         req.user = null;
         res.status(201).send({message: `Usuario Creado`})
     }
@@ -70,17 +69,13 @@ class AuthController{
     }
 
     async resetPassword(req, res, next){
-        try {
-            console.log(req.body.email)
-    
+        try {    
             const isValidEmail = await this.#userService.findByEmail(req.body.email)
-            console.log(isValidEmail)
             if(!isValidEmail) return res.status(404).send({error: 'Email no encontrado en la base de datos'})
     
             const token = generateToken({
                 email: req.body.email
             })
-            console.log(token)
             const resetPasswordUrl = `https://backendecommercecoderhouse-production.up.railway.app/reset-password-ok/${token}`
         
             await this.#emailService.sendEmail(
@@ -92,7 +87,6 @@ class AuthController{
             })
             res.status(202).send({token: isValidEmail})
         } catch (error) {
-            console.log(error)
             res.status(404).send({error: error})
         }
     }

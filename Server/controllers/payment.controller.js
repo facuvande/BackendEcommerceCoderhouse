@@ -20,7 +20,7 @@ export default class PaymentController {
 
             return res.redirect(payment.init_point);
         } catch (error) {
-            console.log(error);
+            logger.error(`Error - ${req.method} - ${error}`)
             return res.status(500).json({ error: true, msg: 'Failed to create payment' })
         }
     }

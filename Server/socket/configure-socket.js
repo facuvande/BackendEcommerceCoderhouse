@@ -13,13 +13,11 @@ export default function configureSocket(httpServer){
         socket.emit('products_actuales', allProducts);
 
         socket.on('message', data =>{
-            console.log({user: data.user, message: data.message})
             messages.push(data)
             chat.addMessage(data)
             socketServer.emit('messageLogs', messages)
         })
         socket.on('new_user', (data) =>{
-            console.log('New user: ', data)
             socket.emit('messageLogs', messages)
             socket.broadcast.emit('user_connected', (data))
         })

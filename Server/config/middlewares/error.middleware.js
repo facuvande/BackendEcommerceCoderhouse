@@ -1,5 +1,4 @@
 export default (error, req, res, next) =>{
-    console.log({error})
     switch(Math.floor(error.code / 100)){
         case 1: // Errores de entrada
             res.userErrorResponse(JSON.parse(error.message));

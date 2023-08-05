@@ -52,21 +52,13 @@ class UsersController{
         const user = req.body
 
         try {
-            console.log('viene1')
             if(user.email == config.admin_email){
-            console.log('viene2')
                 return res.status(400).send({error: 'El email se encuentra registrado'})
             }
 
-            console.log('viene3')
-
             const userExists = await this.#service.findByEmail(user.email)
-            console.log(userExists)
-            console.log('viene4')
 
             if(userExists){
-            console.log('viene5')
-
                 return res.status(409).send({error: "El email se encuentra registrado"})
             }
 
@@ -102,7 +94,7 @@ class UsersController{
                 res.status(400).send({error: 'Usuario inexistente'})
             }
         } catch (error) {
-            console.log(error)
+            logger.error(`Error - ${req.method} - ${error}`)
             res.send({error: 'error'})
         }
     }
@@ -122,7 +114,7 @@ class UsersController{
                 res.status(400).send({error: 'Usuario inexistente'});
             }
         } catch (error) {
-            console.log(error);
+            logger.error(`Error - ${req.method} - ${error}`)
             res.send({error: 'error'});
         }
     }
@@ -136,7 +128,7 @@ class UsersController{
             const updateUser = await this.#service.uploadProfile(email, { firstName, lastName, file: file?.filename });
             res.status(202).send({success: 'User actualizado correctamente'})
         } catch (error) {
-            console.log(error)
+            logger.error(`Error - ${req.method} - ${error}`)
             res.send({error: 'error'});
         }
     }
@@ -148,7 +140,7 @@ class UsersController{
 
             return deleteUser ? res.status(202).send({success: 'Usuario eliminado correctamente'}) : res.status(400).send({error: 'Usuario inexistente'})
         } catch (error) {
-            console.log(error)
+            logger.error(`Error - ${req.method} - ${error}`)
             res.send({error: 'error'});
         }
     }
@@ -156,11 +148,10 @@ class UsersController{
     async deleteInactiveUsers(req, res, next){
         try {
             const deleteInactive = await this.#service.deleteInactiveUsers()
-            console.log(deleteInactive);
 
             return res.status(202).send({success: 'Usuarios inactivos eliminados correctamente'})
         } catch (error) {
-            console.log(error);
+            logger.error(`Error - ${req.method} - ${error}`)
             res.send({error: 'error'})
         }
     }

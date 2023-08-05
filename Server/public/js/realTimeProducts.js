@@ -7,7 +7,6 @@ const $form = document.getElementById('crud-form')
 let products;
 
 socket.on('products_actuales', data => {
-    console.log('socket conectado desde el front')
     products = data;
     limpiarHtml()
     mostrarHtml()

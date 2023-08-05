@@ -63,7 +63,6 @@ class CartController{
 
     async addToCart(req, res, next){
         try {
-            console.log(req.user)
             const cid = req.params.cid
             const pid = req.params.pid
                 
@@ -180,28 +179,33 @@ class CartController{
     }
 
     async purchase (req, res, next){
-        const { email } = req.user;
-        const findUser = await this.#userService.findByEmail(email)
-
-        const cartToPurchase = await this.#service.getWithId(findUser.cart)
-
-        const itemsToPurchase = [];
-
-        cartToPurchase.products.forEach(item =>{
-            // Si la cantidad comprada es menor al stock del producto
-            if(item.quantity <= item.product.stock){
-                itemsToPurchase.push({
-                    title: item.product.title,
-                    description: item.product.description,
-                    category_id: item.product.category,
-                    quantity: item.quantity,
-                    unit_price: item.product.price
-                })
-            }
-        })
-
-        req.itemsToPurchase = itemsToPurchase;
-        const payment = await PaymentsService.getPaymentLink(req, res);
+        try {
+            const { email } = req.user;
+            const findUser = await this.#userService.findByEmail(email)
+    
+            const cartToPurchase = await this.#service.getWithId(findUser.cart)
+    
+            const itemsToPurchase = [];
+    
+            cartToPurchase.products.forEach(item =>{
+                // Si la cantidad comprada es menor al stock del producto
+                if(item.quantity <= item.product.stock){
+                    itemsToPurchase.push({
+                        title: item.product.title,
+                        description: item.product.description,
+                        category_id: item.product.category,
+                        quantity: item.quantity,
+                        unit_price: item.product.price
+                    })
+                }
+            })
+    
+            req.itemsToPurchase = itemsToPurchase;
+            const payment = await PaymentsService.getPaymentLink(req, res);
+        } catch (error) {
+            logger.error(`Error - ${req.method} - ${error}`)
+            next(error)
+        }
     }
 }
 

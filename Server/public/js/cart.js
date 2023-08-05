@@ -91,7 +91,7 @@ async function clearAllItems() {
             );
         }
         } catch (error) {
-        console.log(error);
+            console.log(error);
         }
 }
 

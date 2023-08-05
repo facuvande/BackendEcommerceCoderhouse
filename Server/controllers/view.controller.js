@@ -36,7 +36,6 @@ class ViewController{
     async loginPage(req, res){
         const errorMessage = req.query.error ? 'Email o contrasena incorrectos' : '';
         const email = req.cookies.current
-        console.log(email)
         if(email){
             return res.redirect('/products');
         }
@@ -45,13 +44,10 @@ class ViewController{
 
     async passwordResetOk(req, res){
         try {
-            console.log(req.params.data)
-            console.log(verifyToken(req.params.data))
             const isValidToken = verifyToken(req.params.data)
             res.render('reset-password-ok')
             
         } catch (error) {
-            console.log(error)
             res.redirect('/password_reset')
         }
     
@@ -134,7 +130,7 @@ class ViewController{
                 const id = req.params.id
                 const products = await this.#ProductService.getWithId(id)
                 const { firstName, lastName, role, profileImg } = await this.#UserService.findByEmail(email);
-                console.log(products)
+
                 res.render('product_detail', {
                     data: JSON.parse(JSON.stringify(products)),
                     userInfo: {
@@ -221,8 +217,6 @@ class ViewController{
                 preference_id: req.query.preference_id,
             }
             
-            console.log(req.query.collection_status)
-
             let total = 0;
 
             products.products.forEach(product => {
@@ -261,7 +255,7 @@ class ViewController{
                 profileImg: profileImg ? profileImg : 'default.jpg'
             })
         } catch (error) {
-            console.log(error)
+            next(error)
         }
     }
 
@@ -297,7 +291,6 @@ class ViewController{
                 const products = await this.#CartService.getWithId(cart._id);
                 const productsCart = products.products;
 
-                console.log(productsCart)
                 const restStock = productsCart.map(async product => {
                     const { stock } = await this.#ProductService.getWithId(product.product._id);
                     const newStock = stock - product.quantity;
@@ -317,7 +310,6 @@ class ViewController{
                 }
         
                 // const saveTicket = await this.#TicketsService.generateTicket(ticketToSend)
-                // console.log(saveTicket)
                 // await emailService.sendEmail({ to: email, subject: 'Muchas gracias por tu compra, adjuntamos el ticket', html: `Ticket de compra: ${saveTicket}`})
 
 
@@ -345,7 +337,7 @@ class ViewController{
             }
 
         } catch (error) {
-            console.log(error)
+            next(error)
         }
     }
 

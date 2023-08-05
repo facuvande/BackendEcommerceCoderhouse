@@ -28,7 +28,6 @@ class UsersService{
 
         // Retorna el usuario guardado
         const save = await user.save();
-        console.log(save)
         return save;
     }
 
@@ -115,7 +114,6 @@ class UsersService{
             )
             return updatedUser
         }else{
-            console.log(data.file)
             const updatedUser = await this.#model.findOneAndUpdate(
                 { email: user },
                 { $set : { firstName: data.firstName, lastName: data.lastName, profileImg: data.file } },

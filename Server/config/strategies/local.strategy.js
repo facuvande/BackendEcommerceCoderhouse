@@ -29,7 +29,6 @@ export function localStrategy(){
             }
 
             if(username == config.admin_email){
-                console.log('entra aca')
                 return done({message: 'El email se encuentra registrado'})
             }
             const userExists = await usersModel.findOne({email: username})
@@ -45,7 +44,6 @@ export function localStrategy(){
             })
             return done(null, newUser);
         } catch (error) {
-            console.log('viene>')
             done(error, false)
         }
     }))
@@ -69,12 +67,10 @@ export function localStrategy(){
 
             const user = await usersModel.findOne({email: username})
             if(!user){
-                console.log('Usuario no existente en el login');
                 return done(null, false)
             }
 
             if(!isValidPassword(password, user.password)){
-                console.log('Password Incorrecto')
                 return done(null, false)
             }
 

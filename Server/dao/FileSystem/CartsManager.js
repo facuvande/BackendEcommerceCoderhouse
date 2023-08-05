@@ -40,7 +40,6 @@ export default class CartsManager {
             const data = await fs.promises.readFile(this.path)
             return JSON.parse(data)
         } catch (error) {
-            console.log(`Error: ${error}`)
             return []
         }
     }
