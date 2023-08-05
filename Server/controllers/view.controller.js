@@ -36,7 +36,7 @@ class ViewController{
     async loginPage(req, res){
         const errorMessage = req.query.error ? 'Email o contrasena incorrectos' : '';
         const email = req.cookies.current
-    
+        console.log(email)
         if(email){
             return res.redirect('/products');
         }

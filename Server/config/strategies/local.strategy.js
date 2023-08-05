@@ -16,13 +16,26 @@ export function localStrategy(){
         try {
             const { firstName, lastName, age, role, cart } = req.body
             
+            if (!firstName || !lastName || !username || !password) {
+                return done({ message: 'Todos los campos son obligatorios' });
+            }
+        
+            if (!isValidEmail(username)) {
+                return done({ message: 'Email no válido' });
+            }
+        
+            if (!isValidAge(age)) {
+                return done({ message: 'Edad no válida' });
+            }
+
             if(username == config.admin_email){
+                console.log('entra aca')
                 return done({message: 'El email se encuentra registrado'})
             }
             const userExists = await usersModel.findOne({email: username})
 
             if(userExists){
-                return done(null, false);
+                return done({message: 'El email se encuentra registrado'});
             }
             
             const cartCreate = await CartService.create()
@@ -32,6 +45,7 @@ export function localStrategy(){
             })
             return done(null, newUser);
         } catch (error) {
+            console.log('viene>')
             done(error, false)
         }
     }))
@@ -72,4 +86,14 @@ export function localStrategy(){
             done(error)
         }
     }))
+}
+
+function isValidEmail(email) {
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailPattern.test(email);
+}
+
+function isValidAge(age) {
+    const numericAge = parseInt(age);
+    return !isNaN(numericAge) && numericAge > 0 && numericAge < 120;
 }

@@ -650,114 +650,6 @@ header nav ul li a {
     display: none;
 }
 
-/* Register */
-
-.clouds{
-    position: absolute;
-    top: 0
-}
-
-.textbox input{
-    border: 0;
-    width: 100%;
-    height: 100px;
-    background: transparent;
-    font-family: inherit;
-    font-size: 16px;
-    outline: none;
-    color: white;
-}
-
-.signup{
-    color: white;
-    position: fixed;
-    z-index: 2;
-    top: 0;
-    left: 0;
-    height: 100%;
-    width: 70%;
-    padding: 100px 90px;
-    background-color: #111820; 
-}
-
-.signup > h2{
-    font-size: 40px;
-    margin: 0 0 26px;
-    color: rgb(255, 255, 255 / 96%);
-}
-.signup > h3{
-    margin: 0 0 30px;
-    color: rgb(255, 255, 255 / 40%);
-}
-
-.form{
-    margin: 0;
-    display: grid;
-    gap: 16px;
-}
-
-.textbox{
-    position: relative;
-    margin-bottom: 16px;
-}
-
-.textbox span{
-    position: absolute;
-    top: 50%;
-    translate: 0 -50%;
-    left: 0;
-    font-size: 22px;
-    pointer-events: none;
-    color: rgb(255, 255, 255 / 40%);
-}
-
-.textbox input{
-    padding: 0 24px 0 36px;
-    border-bottom: 2px solid #2b3442;
-    color: rgb(255, 255, 255 /96%);
-    height: 72px;
-}
-
-.textbox input:focus{ border-color: #216ce7;}
-
-:is(.textbox input:focus, .textbox input:valid) ~ span {
-    color: rgb(255, 255, 255 / 96%);
-}
-
-.textbox label {
-    position: absolute;
-    top: 50%;
-    left: 36px;
-    translate: 0 -50px;
-    color: rgb(255, 255, 255 / 40%);
-    pointer-events: none;
-    transition: .5s;
-}
-
-:is(.textbox input:focus, .textbox input:valid) ~ .textbox label{
-    translate: -40px -40px;
-    scale: 0.875;
-    transition: .5s;
-
-}
-
-.textbox input:focus ~ .textbox label { color: #216ce7 }
-
-.signup p { color: #778395 }
-.signup p > a {color: #216ce7}
-
-.buttonRegister{
-    background-color: #216ce7;
-    height: auto;
-    padding: 12px;
-    border-radius: 4px;
-    color: white;
-}
-.buttonRegister:hover{
-    cursor: pointer;
-    opacity: .7;
-}
-
 /* Product detail */
 
 .productInfo{
@@ -786,6 +678,14 @@ header nav ul li a {
     height: 100vh;
     font-family: Arial, Helvetica, sans-serif;
     background: linear-gradient(27deg, #34495e 50%, #2c3e50 50%);
+}
+
+.form-container p{
+    color: white;
+    text-align: center;
+}
+.form-container a{
+    color: #11a3cf;
 }
 
 .form-body{
@@ -830,7 +730,7 @@ header nav ul li a {
     outline: none;
 }
 
-.form-body input[type="password"]{
+.form-body input{
     margin-top: 20px;
 }
 

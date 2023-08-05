@@ -52,12 +52,21 @@ class UsersController{
         const user = req.body
 
         try {
+            console.log('viene1')
             if(user.email == config.admin_email){
+            console.log('viene2')
                 return res.status(400).send({error: 'El email se encuentra registrado'})
             }
 
+            console.log('viene3')
+
             const userExists = await this.#service.findByEmail(user.email)
+            console.log(userExists)
+            console.log('viene4')
+
             if(userExists){
+            console.log('viene5')
+
                 return res.status(409).send({error: "El email se encuentra registrado"})
             }
 

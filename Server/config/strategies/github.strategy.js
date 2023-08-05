@@ -18,7 +18,8 @@ export function githubStrategy(){
                     firstName: profile._json.name,
                     lastName: '-',
                     password: '-',
-                    age: 18
+                    age: 18,
+                    role: 'USER',
                 })
                 return done(null, newUser)
             }
