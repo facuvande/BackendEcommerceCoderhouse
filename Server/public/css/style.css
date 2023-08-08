@@ -478,7 +478,7 @@ header nav ul li a {
 
 /* CART VIEW */
 .cart-container{
-    width: 1200px;
+    width: 90%;
     margin: 0 auto;
 }
 .cart-item{
@@ -513,6 +513,12 @@ header nav ul li a {
     border-radius: 5%;
     padding: 10px;
     cursor: pointer;
+}
+
+@media (max-width: 835px){
+    .cart-item{
+        flex-direction: column;
+    }
 }
 
 /* Edit Profile */
